@@ -1,0 +1,46 @@
+{
+  "name": "Рыбный магазин Sunbeam - Премиальная норвежская семга",
+  "short_name": "Sunbeam",
+  "description": "Премиальная норвежская семга - оригинальная слабосоленая, с цитрусом, подкопченная и для сашими",
+  "lang": "ru",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fefdf8",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["food", "shopping", "business"],
+  "shortcuts": [
+    {
+      "name": "Каталог семги",
+      "short_name": "Каталог",
+      "description": "Посмотреть все виды семги",
+      "url": "/#products",
+      "icons": [{"src": "/favicon-32x32.png", "sizes": "32x32"}]
+    }
+  ]
+}

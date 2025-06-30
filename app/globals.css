@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -26,131 +24,215 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  font-family: 'Inter', sans-serif;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Custom Components using warm sunbeam colors */
+@layer components {
+  .sunbeam-hero {
+    @apply bg-gradient-to-br from-sunbeam-50 via-primary-50 to-warm-50;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(251, 146, 60, 0.1) 0%, transparent 50%);
+  }
+
+  .logo-card {
+    @apply bg-white/80 border border-sunbeam-200/50 backdrop-blur-sm;
+    box-shadow:
+      0 4px 20px rgba(245, 158, 11, 0.1),
+      0 8px 32px rgba(251, 146, 60, 0.05);
+  }
+
+  .logo-card:hover {
+    @apply border-sunbeam-300 scale-105;
+    box-shadow:
+      0 8px 25px rgba(245, 158, 11, 0.15),
+      0 16px 40px rgba(251, 146, 60, 0.1);
+  }
+
+  .glass-warm {
+    @apply bg-warm-50/50 border border-warm-200/30 backdrop-blur-md;
+    background-image:
+      linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(251, 146, 60, 0.1) 100%);
+  }
+
+  .sunbeam-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sunbeam-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  .logo-button {
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+    background: linear-gradient(135deg, #f59e0b, #fb923c, #fdba74);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-button:hover {
+    @apply scale-105;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+  }
+
+  .logo-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .logo-button:hover::before {
+    left: 100%;
+  }
+
+  .sunbeam-cart {
+    background: linear-gradient(135deg, #fefdf8, #fffbeb);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Override any conflicting styles for cart modal */
+  .sunbeam-cart.cart-modal {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: inherit !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .logo-text {
+    background: linear-gradient(135deg, #f59e0b, #ea580c, #d97706);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: wave-text 4s ease-in-out infinite;
+  }
+
+  .fish-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .fish-float:nth-child(even) {
+    animation-delay: -3s;
+  }
+
+  .warm-wave {
+    background: linear-gradient(90deg,
+      rgba(245, 158, 11, 0.1) 0%,
+      rgba(251, 146, 60, 0.2) 50%,
+      rgba(245, 158, 11, 0.1) 100%);
+    background-size: 200% 100%;
+    animation: wave-text 3s ease-in-out infinite;
+  }
+
+  .quantity-button {
+    @apply w-8 h-8 rounded-full border-2 border-warm-300 bg-warm-50 text-warm-700 font-bold text-sm;
+    @apply hover:bg-warm-100 hover:border-warm-400 transition-all duration-200;
+    @apply flex items-center justify-center;
+  }
+
+  .quantity-display {
+    @apply mx-3 px-3 py-1 bg-sunbeam-100 text-sunbeam-800 rounded-md font-semibold min-w-[2rem] text-center;
+  }
+
+  .product-price {
+    @apply text-lg font-bold;
+    background: linear-gradient(135deg, #d97706, #ea580c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-title {
+    @apply text-3xl font-bold mb-8 text-center logo-text;
+  }
+
+  .feature-card {
+    @apply logo-card p-6 rounded-xl transition-all duration-300 hover:shadow-xl;
+  }
+
+  .loading-spinner {
+    @apply w-8 h-8 border-4 border-warm-200 border-t-warm-500 rounded-full animate-spin;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
+/* Animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #f59e0b;
-  border-radius: 4px;
+@keyframes wave-text {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #d97706;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes sunbeam-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Telegram Mini App specific styles */
-.telegram-app {
+.telegram-bg {
   background: var(--tg-theme-bg-color, #ffffff);
   color: var(--tg-theme-text-color, #000000);
 }
 
 .telegram-button {
-  background: var(--tg-theme-button-color, #0088cc);
+  background: var(--tg-theme-button-color, #f59e0b);
   color: var(--tg-theme-button-text-color, #ffffff);
 }
 
-/* Custom animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sunbeam-cart {
+    width: 50px;
+    height: 50px;
+    bottom: 2rem;
+    right: 1rem;
+  }
+
+  .logo-card {
+    @apply p-4;
+  }
+
+  .feature-card {
+    @apply p-4;
+  }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: calc(200px + 100%) 0; }
-}
-
-/* Custom utility classes */
-.glass-effect {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #f59e0b, #ea580c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.floating {
-  animation: float 3s ease-in-out infinite;
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Enhanced button styles */
-.btn-primary {
-  @apply bg-gradient-to-r from-sunbeam-500 to-sunbeam-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-sunbeam-600 hover:to-sunbeam-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
-}
-
-.btn-secondary {
-  @apply border-2 border-sunbeam-500 text-sunbeam-600 px-6 py-3 rounded-xl font-semibold hover:bg-sunbeam-50 transition-all duration-300 transform hover:scale-105;
-}
-
-/* Card enhancements */
-.card-hover {
-  @apply transition-all duration-300 transform hover:scale-105 hover:shadow-2xl;
-}
-
-/* Product card specific */
-.product-card {
-  @apply bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-100;
-}
-
-.product-image {
-  @apply w-full h-48 object-cover transition-transform duration-300 hover:scale-110;
-}
-
-/* Header enhancements */
-.header-glass {
-  @apply bg-white/80 backdrop-blur-md border-b border-gray-200/50;
-}
-
-/* Hero section enhancements */
-.hero-gradient {
-  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 50%, #fbbf24 100%);
-}
-
-/* Feature icons */
-.feature-icon {
-  @apply bg-gradient-to-br from-sunbeam-400 to-sunbeam-600 text-white p-4 rounded-2xl shadow-lg;
-}
-
-/* Cart badge */
-.cart-badge {
-  @apply absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg;
-}
-
-/* Loading states */
-.skeleton {
-  @apply bg-gray-200 animate-pulse rounded;
-}
-
-/* Custom focus styles */
-.focus-ring {
-  @apply focus:outline-none focus:ring-4 focus:ring-sunbeam-300 focus:ring-opacity-50;
+/* Focus states for accessibility */
+.logo-button:focus,
+.quantity-button:focus {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
 }

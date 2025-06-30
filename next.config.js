@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
     unoptimized: true,
-    domains: ['images.unsplash.com'],
   },
-  // For Telegram Mini App
   trailingSlash: true,
-  output: 'export',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '.' : '',
+  experimental: {
+    forceSwcTransforms: true,
+  },
 }
 
 module.exports = nextConfig
