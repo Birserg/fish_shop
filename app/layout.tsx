@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Sunbeam Fish Shop',
     images: [
       {
-        url: '/logo.jpeg',
+        url: '/logo.jpg',
         width: 800,
         height: 600,
         alt: 'Логотип рыбного магазина Sunbeam',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Рыбный магазин Sunbeam - Премиальная норвежская семга',
     description: 'Премиальная норвежская семга с аутентичными вкусами',
-    images: ['/logo.jpeg'],
+    images: ['/logo.jpg'],
   },
   alternates: {
     languages: {
@@ -96,8 +96,8 @@ export default function RootLayout({
               "alternateName": "Рыбный магазин Sunbeam",
               "description": "Премиальная норвежская семга - оригинальная слабосоленая, с цитрусом, подкопченная и для сашими",
               "url": "https://sunbeam-fish-shop.vercel.app",
-              "logo": "https://sunbeam-fish-shop.vercel.app/logo.jpeg",
-              "image": "https://sunbeam-fish-shop.vercel.app/logo.jpeg",
+              "logo": "https://sunbeam-fish-shop.vercel.app/logo.jpg",
+              "image": "https://sunbeam-fish-shop.vercel.app/logo.jpg",
               "telephone": "+66650673689",
               "email": "sunbeam.th.co@gmail.com",
               "address": {
@@ -132,6 +132,26 @@ export default function RootLayout({
                 ]
               }
             })
+          }}
+        />
+        <Script
+          id="preconnect-fonts"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = 'https://fonts.googleapis.com';
+                document.head.appendChild(link);
+
+                const link2 = document.createElement('link');
+                link2.rel = 'preconnect';
+                link2.href = 'https://fonts.gstatic.com';
+                link2.crossOrigin = 'anonymous';
+                document.head.appendChild(link2);
+              })();
+            `
           }}
         />
       </head>

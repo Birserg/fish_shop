@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import toast, { Toaster } from 'react-hot-toast'
+import { track } from '@vercel/analytics'
 
 interface Product {
   id: number
@@ -66,6 +67,7 @@ const products: Product[] = [
 interface CartItem {
   id: number
   quantity: number
+  weight: number // weight in grams for each item
 }
 
 type Language = 'en' | 'ru'
@@ -77,14 +79,25 @@ export default function FishShop() {
   const [loading, setLoading] = useState(true)
   const [isInTelegram, setIsInTelegram] = useState(false)
   const [isTogglingCart, setIsTogglingCart] = useState(false)
+  const [showOrderForm, setShowOrderForm] = useState(false)
+  const [customerDetails, setCustomerDetails] = useState({
+    whatsapp: '',
+    location: '',
+    mapsUrl: ''
+  })
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [selectedWeight, setSelectedWeight] = useState(300)
+  const [isMounted, setIsMounted] = useState(false)
 
   const t = {
     en: {
-      title: "Sunbeam Fish Shop",
+      title: "Sunbeam",
       subtitle: "Premium Norwegian Salmon",
       description: "Experience the authentic taste of Norway with our premium salmon collection",
-      positioning: "We are a small artisanal production specializing in creating lightly salted salmon and gourmet delicacies. Our goal is to restore depth and honesty to taste. We work with first-class ingredients, use our own preparation methods, and strive to create products that speak for themselves — clean, expressive, balanced. We don't just salt fish — we create a gastronomic experience that is understandable, warm, and rich. In the future, we will open our own location — a place where you can not just buy, but taste, feel, and take home a flavor that makes you want to come back.",
+      positioning: "We are a small team that knows what good salmon is all about. We prepare it using a proven recipe — with attention to every detail and respect for quality. Our lightly salted and smoked salmon is what true connoisseurs seek: rich flavor, perfect texture, and nothing unnecessary.",
       addToCart: "Add to Cart",
+      orderButton: "Order",
+      orderMore: "Order More",
       cart: "Cart",
       total: "Total",
       order: "Order via WhatsApp",
@@ -92,34 +105,49 @@ export default function FishShop() {
       perGram: "/100g",
       empty: "Your cart is empty",
       values: "Our Values",
-      tasteAsMeaning: "Taste as Purpose",
-      tasteAsMeaningDesc: "We perfect every product to ideal taste. This isn't mass production — it's gastronomy in small form.",
-      honestyToProduct: "Honesty to Product",
-      honestyToProductDesc: "Only premium ingredients. Only signature methods. No compromises in taste, texture and experience.",
-      handcraftWork: "Handcraft and Craftsmanship",
-      handcraftWorkDesc: "Every stage — from curing to packaging — under control. This is living work, not a conveyor belt.",
-      respectTime: "Respect for Time and Season",
-      respectTimeDesc: "We don't rush. Every flavor has its own rhythm and maturity. We follow this.",
-      homeFeeling: "Home Feeling, Without the Mundane",
-      homeFeelingDesc: "The warmth that food gives — real, not from advertising. This is what you can feel immediately.",
-      personalApproach: "Personal Approach",
-      personalApproachDesc: "We know our customers and their preferences. Every order is prepared with care and attention to individual needs.",
       contact: "Contact Us",
       email: "Email",
       whatsapp: "WhatsApp",
       telegram: "Telegram",
       orderInfo: "Order via WhatsApp for direct contact",
+      minOrder: "Minimum order: 300g",
+      currentWeight: "Weight:",
+      needMore: "Need {{amount}}g more to reach minimum order",
+      orderForm: "Order Details",
+      whatsappLabel: "Your WhatsApp Number",
+      whatsappPlaceholder: "+66 xxx xxx xxx",
+      locationLabel: "Comment",
+      locationPlaceholder: "Any special instructions or notes",
+      mapsLabel: "Google Maps Location",
+      mapsPlaceholder: "Paste Google Maps link",
+      confirmOrder: "Confirm Order",
+      backToCart: "Back to Cart",
+      fillAllFields: "Please fill all fields",
+      invalidPhone: "Please enter a valid phone number",
       orderSuccess: "Order prepared! Redirecting to WhatsApp...",
       itemAdded: "Added to cart!",
       itemRemoved: "Removed from cart",
-      welcomeBack: "Welcome back"
+      welcomeBack: "Welcome back",
+      quality: "Quality",
+      qualityDesc: "We work only with chilled premium Norwegian salmon. Every batch passes through the hands of those who know exactly how perfect curing should look and feel.",
+      recipeWeBelieveIn: "Recipe We Believe In",
+      recipeWeBelieveInDesc: "We've worked long to achieve our taste. We measure everything precisely: salt, aging time, temperature. This gives consistent, clean results — no accidents.",
+      workWithSoul: "Work with Soul and Taste",
+      workWithSoulDesc: "We don't make 'just fish' — we truly care about how it looks, how it sits on bread, how the flavor unfolds. All of this is part of our approach that we believe in.",
+      selectWeight: "Select Weight",
+      weightOptions: "Weight Options",
+      close: "Close",
+      item: "item",
+      items: "items"
     },
     ru: {
       title: "Рыбный магазин Sunbeam",
       subtitle: "Премиальная норвежская семга",
       description: "Попробуйте подлинный вкус Норвегии с нашей премиальной коллекцией семги",
-      positioning: "Мы — небольшое ремесленное производство, специализирующееся на создании слабосолёной сёмги и гастрономических деликатесов. Наша цель — вернуть вкусу его глубину и честность. Мы работаем с первоклассным сырьём, используем собственные методы приготовления и стремимся создавать продукты, которые говорят за себя — чистые, выразительные, сбалансированные. Мы не просто солим рыбу — мы создаём гастрономический опыт, понятный, тёплый и насыщенный. В будущем мы откроем собственную точку — место, где можно не просто купить, а попробовать, почувствовать и взять с собой вкус, за которым хочется вернуться.",
+      positioning: "Мы — небольшая команда, которая знает толк в хорошей сёмге. Делаем её по проверенному рецепту — с вниманием к каждой детали и уважением к качеству. Наша слабосолёная и копчёная сёмга — то, что ищут настоящие ценители: насыщенный вкус, правильная текстура и ни капли лишнего",
       addToCart: "В корзину",
+      orderButton: "Заказать",
+      orderMore: "Заказать ещё",
       cart: "Корзина",
       total: "Итого",
       order: "Заказать через WhatsApp",
@@ -127,27 +155,40 @@ export default function FishShop() {
       perGram: "/100г",
       empty: "Ваша корзина пуста",
       values: "Ценности компании",
-      tasteAsMeaning: "Вкус как смысл",
-      tasteAsMeaningDesc: "Каждый продукт мы доводим до идеала по вкусу. Это не производство ради объёма — это гастрономия в малой форме.",
-      honestyToProduct: "Честность к продукту",
-      honestyToProductDesc: "Только премиальное сырьё. Только авторские методы. Никаких компромиссов во вкусе, текстуре и ощущении.",
-      handcraftWork: "Ручная работа и ремесло",
-      handcraftWorkDesc: "Каждый этап — от засолки до упаковки — под контролем. Это живая работа, а не конвейер.",
-      respectTime: "Уважение к времени и сезону",
-      respectTimeDesc: "Мы не спешим. У каждого вкуса есть свой ритм и своя зрелость. Мы следуем этому.",
-      homeFeeling: "Ощущение дома, без бытового",
-      homeFeelingDesc: "Тепло, которое даёт еда — настоящее, не из рекламы. Это то, что можно почувствовать сразу.",
-      personalApproach: "Персональный подход",
-      personalApproachDesc: "Мы знаем наших клиентов и их предпочтения. Каждый заказ готовится с заботой и вниманием к индивидуальным потребностям.",
       contact: "Связаться с нами",
       email: "Электронная почта",
       whatsapp: "WhatsApp",
       telegram: "Telegram",
       orderInfo: "Заказывайте через WhatsApp для прямого контакта",
+      minOrder: "Минимальный заказ: 300г",
+      currentWeight: "Вес:",
+      needMore: "Нужно ещё {{amount}}г до минимального заказа",
+      orderForm: "Детали заказа",
+      whatsappLabel: "Ваш номер WhatsApp",
+      whatsappPlaceholder: "+66 xxx xxx xxx",
+      locationLabel: "Комментарий",
+      locationPlaceholder: "Особые инструкции или пожелания",
+      mapsLabel: "Локация Google Maps",
+      mapsPlaceholder: "Вставьте ссылку Google Maps",
+      confirmOrder: "Подтвердить заказ",
+      backToCart: "Назад в корзину",
+      fillAllFields: "Пожалуйста, заполните все поля",
+      invalidPhone: "Пожалуйста, введите правильный номер телефона",
       orderSuccess: "Заказ подготовлен! Перенаправление в WhatsApp...",
       itemAdded: "Добавлено в корзину!",
       itemRemoved: "Удалено из корзины",
-      welcomeBack: "Добро пожаловать"
+      welcomeBack: "Добро пожаловать",
+      quality: "Качество",
+      qualityDesc: "Мы работаем только с охлаждённой норвежской сёмгой премиум-класса. Каждая партия проходит через руки тех, кто точно знает, как должна выглядеть и ощущаться идеальная засолка.",
+      recipeWeBelieveIn: "Рецепт, в который верим",
+      recipeWeBelieveInDesc: "Мы долго шли к своему вкусу. Отмеряем всё с точностью: соль, выдержку, температуру. Это даёт стабильный, чистый результат — без случайностей.",
+      workWithSoul: "Работа с душой и вкусом",
+      workWithSoulDesc: "Мы не делаем \"просто рыбу\" — нам по-настоящему важно, как она выглядит, как ложится на хлеб, как раскрывается вкус. Всё это — часть нашего подхода, в котором мы уверены.",
+      selectWeight: "Выберите вес",
+      weightOptions: "Варианты веса",
+      close: "Закрыть",
+      item: "товар",
+      items: "товаров"
     }
   }
 
@@ -192,35 +233,47 @@ export default function FishShop() {
         }
       }
 
-      // Load saved language and cart
-      const savedLanguage = localStorage.getItem('language') as Language
-      if (savedLanguage) {
-        setLanguage(savedLanguage)
-      }
+      // Load saved language and cart - only on client side
+      if (typeof window !== 'undefined') {
+        const savedLanguage = localStorage.getItem('language') as Language
+        if (savedLanguage) {
+          setLanguage(savedLanguage)
+        }
 
-      const savedCart = localStorage.getItem('cart')
-      if (savedCart) {
-        setCart(JSON.parse(savedCart))
+        const savedCart = localStorage.getItem('cart')
+        if (savedCart) {
+          try {
+            setCart(JSON.parse(savedCart))
+          } catch (error) {
+            console.warn('Failed to parse saved cart:', error)
+            localStorage.removeItem('cart')
+          }
+        }
       }
 
       setLoading(false)
-
-      // Welcome message
-      setTimeout(() => {
-        toast.success(t[language].welcomeBack)
-      }, 500)
+      setIsMounted(true)
     }
 
     initializeApp()
   }, [])
 
+  // Welcome message after mount
+  useEffect(() => {
+    if (isMounted) {
+      setTimeout(() => {
+        toast.success(t[language].welcomeBack)
+      }, 500)
+    }
+  }, [isMounted, language, t])
+
   // Save to localStorage when cart or language changes
   useEffect(() => {
-    if (!loading) {
+    if (!loading && typeof window !== 'undefined') {
       localStorage.setItem('cart', JSON.stringify(cart))
 
       // Update Telegram main button
-      if (window.Telegram?.WebApp?.MainButton) {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp?.MainButton) {
         const totalItems = getTotalItems()
         if (totalItems > 0) {
           window.Telegram.WebApp.MainButton.setText(`🛒 Cart (${totalItems})`)
@@ -234,48 +287,70 @@ export default function FishShop() {
   }, [cart, loading])
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && typeof window !== 'undefined') {
       localStorage.setItem('language', language)
     }
   }, [language, loading])
 
   // Cart functions
-  const addToCart = (productId: number) => {
+  const addToCart = (productId: number, weight: number = 100) => {
+    const product = products.find(p => p.id === productId)
+
     setCart(prev => {
-      const existing = prev.find(item => item.id === productId)
+      // Find existing item with the SAME weight (not just same product)
+      const existing = prev.find(item => item.id === productId && Math.round(item.weight / item.quantity) === weight)
       if (existing) {
         return prev.map(item =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
+          item.id === productId && Math.round(item.weight / item.quantity) === weight
+            ? { ...item, quantity: item.quantity + 1, weight: item.weight + weight }
             : item
         )
       }
-      return [...prev, { id: productId, quantity: 1 }]
+      // Create new cart item for different weight of same product
+      return [...prev, { id: productId, quantity: 1, weight: weight }]
+    })
+
+    // Analytics tracking
+    track('add_to_cart', {
+      product_id: productId,
+      product_name: (language === 'en' ? product?.name : product?.nameRu) || 'unknown',
+      price: product?.price || 0,
+      weight: weight,
+      platform: isInTelegram ? 'telegram' : 'web',
+      language: language
     })
 
     // Haptic feedback
-    if (window.Telegram?.WebApp?.HapticFeedback) {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
       window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
     }
 
     toast.success(t[language].itemAdded)
+    setSelectedProduct(null) // Close modal after adding to cart
   }
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: number, targetWeight?: number) => {
     setCart(prev => {
-      const existing = prev.find(item => item.id === productId)
+      // If targetWeight is provided, find the specific cart item
+      // Otherwise, find the first item with this productId
+      const existing = targetWeight
+        ? prev.find(item => item.id === productId && Math.round(item.weight / item.quantity) === targetWeight)
+        : prev.find(item => item.id === productId)
+
       if (existing && existing.quantity > 1) {
+        const weightPerItem = Math.round(existing.weight / existing.quantity)
         return prev.map(item =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity - 1 }
+          item === existing
+            ? { ...item, quantity: item.quantity - 1, weight: Math.max(0, item.weight - weightPerItem) }
             : item
         )
       }
-      return prev.filter(item => item.id !== productId)
+      // Remove the entire cart item
+      return prev.filter(item => item !== existing)
     })
 
     // Haptic feedback
-    if (window.Telegram?.WebApp?.HapticFeedback) {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.HapticFeedback) {
       window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
     }
 
@@ -285,7 +360,7 @@ export default function FishShop() {
   const getTotalPrice = () => {
     return cart.reduce((total, item) => {
       const product = products.find(p => p.id === item.id)
-      return total + (product ? product.price * item.quantity : 0)
+      return total + (product ? (product.price * item.weight) / 100 : 0)
     }, 0)
   }
 
@@ -293,55 +368,114 @@ export default function FishShop() {
     return cart.reduce((total, item) => total + item.quantity, 0)
   }
 
-  const getCartItemQuantity = (productId: number) => {
-    const item = cart.find(item => item.id === productId)
-    return item ? item.quantity : 0
+  const getTotalWeight = () => {
+    return cart.reduce((total, item) => total + item.weight, 0)
   }
 
-  const handleOrder = () => {
+  const getCartItemQuantity = (productId: number) => {
+    // Sum up quantities across all cart items for this product (different weights)
+    return cart
+      .filter(item => item.id === productId)
+      .reduce((total, item) => total + item.quantity, 0)
+  }
+
+    const handleOrder = () => {
     if (cart.length === 0) return
 
+    const totalWeight = getTotalWeight()
+    if (totalWeight < 300) {
+      const needed = 300 - totalWeight
+      const message = t[language].needMore.replace('{{amount}}', needed.toString())
+      toast.error(message)
+      return
+    }
+
+    // Show order form instead of immediately sending to WhatsApp
+    setShowOrderForm(true)
+  }
+
+  const handleConfirmOrder = () => {
+    // Validate form fields
+    if (!customerDetails.whatsapp.trim() || !customerDetails.mapsUrl.trim()) {
+      toast.error(t[language].fillAllFields)
+      return
+    }
+
+    // Improved phone number validation for international numbers
+    const phoneNumber = customerDetails.whatsapp.trim()
+    // Remove all non-digit characters except + at the beginning
+    const cleanPhone = phoneNumber.replace(/[^\d+]/g, '')
+    // Check if it starts with + and has at least 7 digits
+    const hasCountryCode = cleanPhone.startsWith('+')
+    const digitCount = cleanPhone.replace(/\D/g, '').length
+
+    if (!hasCountryCode || digitCount < 7 || digitCount > 15) {
+      toast.error(t[language].invalidPhone)
+      return
+    }
+
+    // Proceed directly to WhatsApp
+    const totalWeight = getTotalWeight()
     const orderText = cart.map((item, index) => {
       const product = products.find(p => p.id === item.id)
       const productName = language === 'en' ? product?.name : product?.nameRu
-      return `${index + 1}. ${productName} x${item.quantity} - ฿${product ? product.price * item.quantity : 0}`
+      const totalPrice = product ? (product.price * item.weight) / 100 : 0
+      return `${index + 1}. ${productName} x${item.quantity} (${item.weight}g) - ฿${Math.round(totalPrice)}`
     }).join('\n')
 
     const totalPrice = getTotalPrice()
 
     const message = language === 'en'
-      ? `*Order from Sunbeam Fish Shop*\n\n*Items:*\n${orderText}\n\n*Total: ฿${totalPrice}*\n\nThank you for your order!`
-      : `*Заказ из рыбного магазина Sunbeam*\n\n*Товары:*\n${orderText}\n\n*Итого: ฿${totalPrice}*\n\nСпасибо за ваш заказ!`
+      ? `*Order from Sunbeam Fish Shop*\n\n*Customer Details:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Location: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Comment: ${customerDetails.location}` : ''}\n\n*Items:*\n${orderText}\n\n*Total Weight: ${totalWeight}g*\n*Total: ฿${Math.round(totalPrice)}*\n\nThank you for your order!`
+      : `*Заказ из рыбного магазина Sunbeam*\n\n*Данные клиента:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Адрес: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Комментарий: ${customerDetails.location}` : ''}\n\n*Товары:*\n${orderText}\n\n*Общий вес: ${totalWeight}г*\n*Итого: ฿${Math.round(totalPrice)}*\n\nСпасибо за ваш заказ!`
 
     const whatsappUrl = `https://wa.me/66650673689?text=${encodeURIComponent(message)}`
 
+    // Analytics tracking for order
+    track('place_order', {
+      total_price: Math.round(totalPrice),
+      items_count: cart.length,
+      total_items: cart.reduce((sum, item) => sum + item.quantity, 0),
+      platform: isInTelegram ? 'telegram' : 'web',
+      language: language
+    })
+
     toast.success(t[language].orderSuccess)
 
-    // Clear cart and close modal first
+    // Clear cart and close modals
     setCart([])
     setIsCartOpen(false)
+    setShowOrderForm(false)
+    setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' })
 
     setTimeout(() => {
       if (isInTelegram && typeof window !== 'undefined' && window.Telegram?.WebApp) {
         // For Telegram mini app, use openTelegramLink or openLink
         try {
           window.Telegram.WebApp.openTelegramLink(whatsappUrl)
-        } catch (e) {
+        } catch {
           try {
             window.Telegram.WebApp.openLink(whatsappUrl)
-          } catch (e2) {
+          } catch {
             // Fallback to regular window.open
-            window.open(whatsappUrl, '_blank')
+            if (typeof window !== 'undefined') {
+              window.open(whatsappUrl, '_blank')
+            }
           }
         }
       } else {
         // For regular web browsers
-        window.open(whatsappUrl, '_blank')
+        if (typeof window !== 'undefined') {
+          window.open(whatsappUrl, '_blank')
+        }
       }
     }, 500)
   }
 
-  const cartItemsCount = getTotalItems()
+  const openProductModal = (product: Product) => {
+    setSelectedProduct(product)
+    setSelectedWeight(300) // Default to 300g
+  }
 
   if (loading) {
     return (
@@ -355,15 +489,28 @@ export default function FishShop() {
   }
 
   return (
-    <main className="min-h-screen sunbeam-hero">
+    <main className="min-h-screen sunbeam-hero pb-20 md:pb-0">
       {/* Top Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass-warm border-b border-warm-200/30 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-3 flex justify-end items-center">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          {/* Left Side - Logo */}
+          <div className="flex items-center">
+            <Image
+              src="/logo.svg"
+              alt="Sunbeam Logo"
+              width={60}
+              height={60}
+              className="rounded-lg"
+              priority
+            />
+          </div>
+
           {/* Right Side - Phone, Cart (Web) and Language Toggle */}
           <div className="flex items-center gap-3">
             {/* Phone */}
             <a
               href="https://wa.me/66650673689"
+              target="_blank"
               className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-warm-800"
             >
               📞 +66650673689
@@ -381,7 +528,7 @@ export default function FishShop() {
                   }
                 }}
                 disabled={isTogglingCart}
-                className="logo-button flex items-center gap-2 px-4 py-2 text-sm"
+                className="logo-button flex items-center gap-2 px-4 py-2 text-sm hidden md:flex"
               >
                 🛒 {t[language].cart}
                 {cart.length > 0 && (
@@ -393,7 +540,15 @@ export default function FishShop() {
             )}
             {/* Language Toggle */}
             <button
-              onClick={() => setLanguage(language === 'en' ? 'ru' : 'en')}
+              onClick={() => {
+                const newLang = language === 'en' ? 'ru' : 'en'
+                track('language_change', {
+                  from: language,
+                  to: newLang,
+                  platform: isInTelegram ? 'telegram' : 'web'
+                })
+                setLanguage(newLang)
+              }}
               className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform"
             >
               {language === 'en' ? '🇷🇺 RU' : '🇬🇧 EN'}
@@ -403,26 +558,22 @@ export default function FishShop() {
       </nav>
 
       {/* Header */}
-      <header className="container mx-auto px-4 py-8 text-center mt-20">
-        <div className="fish-float mb-6">
+      <header className="container mx-auto px-4 py-8 mt-20">
+        <div className="text-center mb-8">
           <Image
-            src="/logo.jpeg"
-            alt="Sunbeam Logo"
-            width={120}
+            src="/sunbeam_text.svg"
+            alt="Sunbeam"
+            width={300}
             height={120}
-            className="mx-auto logo-card p-2 rounded-full"
+            className="mx-auto"
             priority
           />
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold logo-text mb-4">
-          {t[language].title}
-        </h1>
-        <p className="text-xl md:text-2xl text-warm-700 mb-2 font-semibold">
-          {t[language].subtitle}
-        </p>
-        <p className="text-warm-600 max-w-2xl mx-auto">
-          {t[language].description}
-        </p>
+        <div className="text-center">
+          <p className="text-warm-600 max-w-2xl mx-auto">
+            {t[language].positioning}
+          </p>
+        </div>
       </header>
 
       {/* Products Grid */}
@@ -439,6 +590,7 @@ export default function FishShop() {
                     width={400}
                     height={300}
                     className="w-full h-48 sm:h-56 object-cover rounded-lg"
+                    loading="lazy"
                   />
                   {product.badge && (
                     <span className="absolute top-2 right-2 sunbeam-badge">
@@ -461,31 +613,13 @@ export default function FishShop() {
                       ฿{product.price}{t[language].perGram}
                     </span>
 
-                    {quantity > 0 ? (
-                      <div className="flex items-center">
-                        <button
-                          onClick={() => removeFromCart(product.id)}
-                          className="quantity-button"
-                        >
-                          −
-                        </button>
-                        <span className="quantity-display">{quantity}</span>
-                        <button
-                          onClick={() => addToCart(product.id)}
-                          className="quantity-button"
-                        >
-                          +
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => addToCart(product.id)}
-                        className="logo-button text-sm sm:text-base px-4 py-2"
-                        aria-label={`${t[language].addToCart}: ${language === 'en' ? product.name : product.nameRu}`}
-                      >
-                        {t[language].addToCart}
-                      </button>
-                    )}
+                    <button
+                      onClick={() => openProductModal(product)}
+                      className="logo-button text-sm sm:text-base px-4 py-2"
+                      aria-label={`${t[language].orderButton}: ${language === 'en' ? product.name : product.nameRu}`}
+                    >
+                      {quantity > 0 ? t[language].orderMore : t[language].orderButton}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -494,69 +628,33 @@ export default function FishShop() {
         </div>
       </section>
 
-      {/* About Us / Positioning Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="glass-warm p-8 rounded-2xl">
-            <div className="max-w-4xl mx-auto">
-              <p className="text-warm-800 leading-relaxed text-base md:text-lg font-medium text-justify md:text-center">
-                {t[language].positioning}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Values Section */}
       <section id="values" className="container mx-auto px-4 py-16">
         <h2 className="section-title">{t[language].values}</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <div className="feature-card text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-sunbeam-400 to-sunbeam-600 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🎯</span>
+              <span className="text-2xl">💎</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].tasteAsMeaning}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].tasteAsMeaningDesc}</p>
+            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].quality}</h3>
+            <p className="text-warm-600 text-sm leading-relaxed">{t[language].qualityDesc}</p>
           </div>
 
           <div className="feature-card text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-warm-400 to-warm-600 rounded-full flex items-center justify-center">
-              <span className="text-2xl">💎</span>
+              <span className="text-2xl">📋</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].honestyToProduct}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].honestyToProductDesc}</p>
+            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].recipeWeBelieveIn}</h3>
+            <p className="text-warm-600 text-sm leading-relaxed">{t[language].recipeWeBelieveInDesc}</p>
           </div>
 
           <div className="feature-card text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🖐</span>
+              <span className="text-2xl">❤️</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].handcraftWork}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].handcraftWorkDesc}</p>
-          </div>
-
-          <div className="feature-card text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-sunbeam-500 to-sunbeam-700 rounded-full flex items-center justify-center">
-              <span className="text-2xl">⏰</span>
-            </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].respectTime}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].respectTimeDesc}</p>
-          </div>
-
-          <div className="feature-card text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-warm-500 to-warm-700 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🏠</span>
-            </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].homeFeeling}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].homeFeelingDesc}</p>
-          </div>
-
-          <div className="feature-card text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center">
-              <span className="text-2xl">👤</span>
-            </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].personalApproach}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].personalApproachDesc}</p>
+            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].workWithSoul}</h3>
+            <p className="text-warm-600 text-sm leading-relaxed">{t[language].workWithSoulDesc}</p>
           </div>
         </div>
       </section>
@@ -580,6 +678,7 @@ export default function FishShop() {
               <p className="text-warm-600 font-medium">{t[language].whatsapp}</p>
               <a
                 href="https://wa.me/66650673689"
+                target="_blank"
                 className="text-warm-700 hover:text-warm-800 transition-colors"
               >
                 +66650673689
@@ -589,6 +688,9 @@ export default function FishShop() {
             <p className="text-warm-500 text-sm mt-4">
               {t[language].orderInfo}
             </p>
+            <p className="text-warm-600 text-sm mt-2 font-medium">
+              {t[language].minOrder}
+            </p>
           </div>
         </div>
       </section>
@@ -597,16 +699,18 @@ export default function FishShop() {
       {isCartOpen && (
         <div
           className={`fixed inset-0 bg-black/70 flex z-50 ${isInTelegram ? 'items-end' : 'items-center justify-center p-4'}`}
-          onClick={(e) => {
-            if (e.target === e.currentTarget && !isTogglingCart) {
-              setIsTogglingCart(true);
-              setIsCartOpen(false);
-              setTimeout(() => setIsTogglingCart(false), 100);
-            }
-          }}
+                        onClick={(e) => {
+                if (e.target === e.currentTarget && !isTogglingCart) {
+                  setIsTogglingCart(true);
+                  setIsCartOpen(false);
+                  setShowOrderForm(false);
+                  setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
+                  setTimeout(() => setIsTogglingCart(false), 100);
+                }
+              }}
         >
                               <div
-            className={`cart-modal-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl' : 'w-full max-w-md mx-auto rounded-2xl max-h-[85vh]'} shadow-2xl overflow-hidden`}
+            className={`cart-modal-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh]'} shadow-2xl overflow-hidden`}
             style={{
               background: 'linear-gradient(135deg, #fefdf8, #fffbeb)',
               border: '1px solid rgba(245, 158, 11, 0.2)',
@@ -625,6 +729,8 @@ export default function FishShop() {
                     if (!isTogglingCart) {
                       setIsTogglingCart(true);
                       setIsCartOpen(false);
+                      setShowOrderForm(false);
+                      setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
                       setTimeout(() => setIsTogglingCart(false), 100);
                     }
                   }}
@@ -651,47 +757,91 @@ export default function FishShop() {
 
                         return (
                           <div key={item.id} className={`bg-warm-50/80 rounded-lg border border-warm-200/50 ${isInTelegram ? 'p-3' : 'p-4'}`}>
-                            <div className={`${isInTelegram ? 'mb-2' : 'mb-3'}`}>
-                              <h3 className={`font-semibold text-warm-800 leading-tight ${isInTelegram ? 'text-sm' : 'text-base'}`}>
-                                {language === 'en' ? product.name : product.nameRu}
-                              </h3>
-                              <p className={`text-warm-600 mt-1 ${isInTelegram ? 'text-xs' : 'text-sm'}`}>
-                                ฿{product.price} × {item.quantity} = <span className="font-semibold">฿{product.price * item.quantity}</span>
-                              </p>
-                            </div>
+                            <div className="flex gap-3">
+                              {/* Product Image */}
+                              <div className="flex-shrink-0">
+                                <Image
+                                  src={product.image}
+                                  alt={language === 'en' ? product.name : product.nameRu}
+                                  width={60}
+                                  height={60}
+                                  className="w-12 h-12 object-cover rounded-lg"
+                                  loading="lazy"
+                                />
+                              </div>
 
-                            <div className="flex items-center justify-center">
-                              <button
-                                onClick={() => removeFromCart(item.id)}
-                                className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
-                              >
-                                −
-                              </button>
-                              <span className={`font-bold text-warm-800 min-w-[2rem] text-center ${isInTelegram ? 'mx-4 text-lg' : 'mx-4 text-lg'}`}>
-                                {item.quantity}
-                              </span>
-                              <button
-                                onClick={() => addToCart(item.id)}
-                                className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
-                              >
-                                +
-                              </button>
+                              {/* Product Info */}
+                              <div className="flex-1">
+                                <div className={`${isInTelegram ? 'mb-2' : 'mb-3'}`}>
+                                  <h3 className={`font-semibold text-warm-800 leading-tight ${isInTelegram ? 'text-sm' : 'text-base'}`}>
+                                    {language === 'en' ? product.name : product.nameRu}
+                                  </h3>
+                                  <p className={`text-warm-600 mt-1 ${isInTelegram ? 'text-xs' : 'text-sm'}`}>
+                                    {item.quantity} × {Math.round(item.weight / item.quantity)}g = {item.weight}g - <span className="font-semibold">฿{Math.round((product.price * item.weight) / 100)}</span>
+                                  </p>
+                                </div>
+
+                                <div className="flex items-center justify-center">
+                                  <button
+                                    onClick={() => {
+                                      const weightPerItem = Math.round(item.weight / item.quantity)
+                                      removeFromCart(item.id, weightPerItem)
+                                    }}
+                                    className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
+                                  >
+                                    −
+                                  </button>
+                                  <span className={`font-bold text-warm-800 min-w-[2rem] text-center ${isInTelegram ? 'mx-4 text-lg' : 'mx-4 text-lg'}`}>
+                                    {item.quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      // Add the same weight per item to maintain consistency
+                                      const weightPerItem = Math.round(item.weight / item.quantity)
+                                      addToCart(item.id, weightPerItem)
+                                    }}
+                                    className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         )
                       })}
                     </div>
 
-                    {/* Footer */}
+                                        {/* Footer */}
                     <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'}`}>
-                      <div className="flex justify-between items-center mb-4">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-lg font-bold text-warm-800">{t[language].currentWeight}</span>
+                        <span className="text-lg font-bold text-warm-800">{getTotalWeight()}g</span>
+                      </div>
+
+                      <div className="flex justify-between items-center mb-2">
                         <span className="text-xl font-bold text-warm-800">{t[language].total}:</span>
                         <span className="text-xl font-bold text-warm-800">฿{getTotalPrice()}</span>
                       </div>
 
+                      {getTotalWeight() < 300 ? (
+                        <p className="text-red-600 text-xs text-center mb-4 font-medium">
+                          {t[language].needMore.replace('{{amount}}', (300 - getTotalWeight()).toString())}
+                        </p>
+                      ) : (
+                        <p className="text-green-600 text-xs text-center mb-4 font-medium">
+                          ✓ {t[language].minOrder}
+                        </p>
+                      )}
+
                       <button
                         onClick={handleOrder}
-                        className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg text-lg transition-all duration-200 ${isInTelegram ? 'py-4 px-6' : 'py-3 px-6'}`}
+                        disabled={getTotalWeight() < 300}
+                        className={`w-full font-bold rounded-lg text-lg transition-all duration-200 ${isInTelegram ? 'py-4 px-6' : 'py-3 px-6'} ${
+                          getTotalWeight() < 300
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white'
+                        }`}
                       >
                         {t[language].order}
                       </button>
@@ -701,6 +851,262 @@ export default function FishShop() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Order Form Modal */}
+      {showOrderForm && (
+        <div
+          className={`fixed inset-0 bg-black/70 flex z-50 ${isInTelegram ? 'items-end' : 'items-center justify-center p-4'}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowOrderForm(false)
+            }
+          }}
+        >
+          <div
+            className={`order-form-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh]'} shadow-2xl overflow-hidden`}
+            style={{
+              background: 'linear-gradient(135deg, #fefdf8, #fffbeb)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              backdropFilter: 'blur(12px)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
+              {/* Header */}
+              <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
+                <h2 className="text-2xl font-bold text-warm-800">{t[language].orderForm}</h2>
+                <button
+                  onClick={() => setShowOrderForm(false)}
+                  className="text-warm-600 hover:text-warm-800 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-warm-100"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Form Content */}
+              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4' : 'p-6'}`}>
+                <div className="space-y-6">
+                  {/* WhatsApp Number Field */}
+                  <div>
+                    <label className="block text-warm-800 font-semibold mb-2">
+                      {t[language].whatsappLabel}
+                    </label>
+                    <input
+                      type="tel"
+                      value={customerDetails.whatsapp}
+                      onChange={(e) => {
+                        // Allow international phone number formats
+                        const value = e.target.value
+                        setCustomerDetails({...customerDetails, whatsapp: value})
+                      }}
+                      placeholder={language === 'en' ? '+66 650 673 689' : '+66 650 673 689'}
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800"
+                    />
+                  </div>
+
+                  {/* Google Maps URL Field */}
+                  <div>
+                    <label className="block text-warm-800 font-semibold mb-2">
+                      {t[language].mapsLabel}
+                    </label>
+                    <input
+                      type="url"
+                      value={customerDetails.mapsUrl}
+                      onChange={(e) => setCustomerDetails({...customerDetails, mapsUrl: e.target.value})}
+                      placeholder={t[language].mapsPlaceholder}
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800"
+                    />
+                  </div>
+
+                  {/* Comment Field */}
+                  <div>
+                    <label className="block text-warm-800 font-semibold mb-2">
+                      {t[language].locationLabel}
+                    </label>
+                    <textarea
+                      value={customerDetails.location}
+                      onChange={(e) => setCustomerDetails({...customerDetails, location: e.target.value})}
+                      placeholder={t[language].locationPlaceholder}
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800 resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Form Footer */}
+                <div className={`mt-6 space-y-3 ${isInTelegram ? 'mt-auto' : ''}`}>
+                  <button
+                    onClick={handleConfirmOrder}
+                    className="w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-200"
+                  >
+                    {t[language].confirmOrder}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowOrderForm(false);
+                      setIsCartOpen(true);
+                    }}
+                    className="w-full bg-warm-200 hover:bg-warm-300 text-warm-800 font-bold py-3 px-6 rounded-lg transition-all duration-200"
+                  >
+                    {t[language].backToCart}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Product Selection Modal */}
+      {selectedProduct && (
+        <div
+          className={`fixed inset-0 bg-black/70 flex z-50 ${isInTelegram ? 'items-end' : 'items-center justify-center p-4'}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedProduct(null)
+            }
+          }}
+        >
+          <div
+            className={`product-modal-container ${isInTelegram ? 'w-full h-[85vh] rounded-t-3xl' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[95vh]'} shadow-2xl overflow-hidden`}
+            style={{
+              background: 'linear-gradient(135deg, #fefdf8, #fffbeb)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              backdropFilter: 'blur(12px)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
+              {/* Header */}
+              <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-3 pb-3' : 'p-6 mb-6 pb-4'}`}>
+                <h2 className={`font-bold text-warm-800 ${isInTelegram ? 'text-lg' : 'text-2xl'}`}>{t[language].selectWeight}</h2>
+                <button
+                  onClick={() => setSelectedProduct(null)}
+                  className={`text-warm-600 hover:text-warm-800 font-bold flex items-center justify-center rounded-full hover:bg-warm-100 ${isInTelegram ? 'text-2xl w-8 h-8' : 'text-3xl w-10 h-10'}`}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-3' : 'p-6'} overflow-y-auto`}>
+                {/* Product Image and Info - Side by Side */}
+                <div className={`flex gap-3 items-start ${isInTelegram ? 'mb-4' : 'mb-6'}`}>
+                  {/* Product Image - Left Side */}
+                  <div className={`flex-shrink-0 ${isInTelegram ? 'w-1/2' : 'w-1/2'}`}>
+                    <div className="relative leading-none">
+                      <Image
+                        src={selectedProduct.image}
+                        alt={language === 'en' ? selectedProduct.name : selectedProduct.nameRu}
+                        width={300}
+                        height={200}
+                        className={`w-full object-cover rounded-lg ${isInTelegram ? 'h-48' : 'h-60'} block`}
+                        loading="lazy"
+                      />
+                      {selectedProduct.badge && (
+                        <span className={`absolute top-1 right-1 bg-warm-500 text-white rounded-full ${isInTelegram ? 'text-xs px-1.5 py-0.5' : 'text-xs px-2 py-1'}`}>
+                          {language === 'en' ? selectedProduct.badge : selectedProduct.badgeRu}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Product Info - Right Side */}
+                  <div className="flex-1 min-h-0">
+                    <h3 className={`font-bold text-warm-800 mt-0 leading-tight ${isInTelegram ? 'text-sm mb-1' : 'text-lg mb-2'}`}>
+                      {language === 'en' ? selectedProduct.name : selectedProduct.nameRu}
+                    </h3>
+                    <div className={`text-warm-600 leading-relaxed ${isInTelegram ? 'text-xs' : 'text-sm'} whitespace-normal break-words overflow-y-auto`}>
+                      {language === 'en' ? selectedProduct.description : selectedProduct.descriptionRu}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Weight Options */}
+                <div className={`${isInTelegram ? 'mb-2' : 'mb-3'} flex-shrink-0`}>
+                  <h4 className={`font-semibold text-warm-800 ${isInTelegram ? 'text-sm mb-1.5' : 'text-base mb-2'}`}>{t[language].weightOptions}</h4>
+                  <div className={`${isInTelegram ? 'space-y-1' : 'space-y-1.5'}`}>
+                    {[300, 400, 500].map((weight) => (
+                      <button
+                        key={weight}
+                        onClick={() => setSelectedWeight(weight)}
+                        className={`w-full rounded-lg border-2 transition-all duration-200 ${isInTelegram ? 'p-1.5' : 'p-2'} ${
+                          selectedWeight === weight
+                            ? 'border-warm-500 bg-warm-50'
+                            : 'border-warm-200 bg-white hover:border-warm-300'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className={`font-semibold text-warm-800 ${isInTelegram ? 'text-sm' : 'text-base'}`}>{weight}g</span>
+                          <span className={`font-bold text-warm-700 ${isInTelegram ? 'text-sm' : 'text-base'}`}>
+                            ฿{Math.round(selectedProduct.price * (weight / 100))}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Add to Cart Button */}
+                <div className={`${isInTelegram ? 'mt-auto pt-2' : ''}`}>
+                  <button
+                    onClick={() => addToCart(selectedProduct.id, selectedWeight)}
+                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-sm' : 'py-3 px-6 text-base'}`}
+                  >
+                    {t[language].addToCart} ({selectedWeight}g - ฿{Math.round(selectedProduct.price * (selectedWeight / 100))})
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Bottom Cart Bar */}
+      {!isInTelegram && cart.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 md:hidden z-40 bg-white border-t border-warm-200 shadow-lg">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!isTogglingCart) {
+                setIsTogglingCart(true);
+                setIsCartOpen(true);
+                setTimeout(() => setIsTogglingCart(false), 100);
+              }
+            }}
+            disabled={isTogglingCart}
+            className="w-full p-4 flex items-center justify-between hover:bg-warm-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <span className="text-2xl">🛒</span>
+                <span className="absolute -top-2 -right-2 bg-warm-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {getTotalItems()}
+                </span>
+              </div>
+              <div className="text-left">
+                <div className="text-warm-800 font-semibold text-sm">
+                  {getTotalItems()} {getTotalItems() === 1 ? t[language].item : t[language].items} • {getTotalWeight()}g
+                </div>
+                <div className="text-warm-600 text-xs">
+                  {t[language].cart}
+                </div>
+              </div>
+            </div>
+
+            <div className="text-right">
+              <div className="text-warm-800 font-bold text-lg">
+                ฿{Math.round(getTotalPrice())}
+              </div>
+              <div className="text-warm-600 text-xs">
+                {t[language].total}
+              </div>
+            </div>
+          </button>
         </div>
       )}
 
