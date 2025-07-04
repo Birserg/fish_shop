@@ -265,7 +265,7 @@ export default function FishShop() {
         toast.success(t[language].welcomeBack)
       }, 500)
     }
-  }, [isMounted, language, t])
+  }, [isMounted]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Save to localStorage when cart or language changes
   useEffect(() => {
