@@ -482,7 +482,7 @@ export default function FishShop() {
       <div className="min-h-screen flex items-center justify-center sunbeam-hero">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-warm-300 border-t-warm-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-warm-600">Loading...</p>
+          <p className="text-gray-900">Loading...</p>
         </div>
       </div>
     )
@@ -511,7 +511,7 @@ export default function FishShop() {
             <a
               href="https://wa.me/66650673689"
               target="_blank"
-              className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-warm-800"
+              className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-gray-900"
             >
               📞 +66650673689
             </a>
@@ -532,7 +532,7 @@ export default function FishShop() {
               >
                 🛒 {t[language].cart}
                 {cart.length > 0 && (
-                  <span className="bg-warm-100 text-warm-800 rounded-lg px-2 py-1 text-xs font-bold min-w-[1.5rem]">
+                  <span className="bg-warm-100 text-gray-900 rounded-lg px-2 py-1 text-xs font-bold min-w-[1.5rem]">
                     {getTotalItems()}
                   </span>
                 )}
@@ -570,7 +570,7 @@ export default function FishShop() {
           />
         </div>
         <div className="text-center">
-          <p className="text-warm-600 max-w-2xl mx-auto">
+          <p className="text-gray-900 max-w-2xl mx-auto">
             {t[language].positioning}
           </p>
         </div>
@@ -600,11 +600,11 @@ export default function FishShop() {
                 </div>
 
                 <div className="flex flex-col flex-grow">
-                  <h3 className="text-lg sm:text-xl font-bold text-warm-800 mb-3">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">
                     {language === 'en' ? product.name : product.nameRu}
                   </h3>
 
-                  <p className="text-warm-600 mb-4 text-sm sm:text-base leading-relaxed flex-grow">
+                  <p className="text-gray-900 mb-4 text-sm sm:text-base leading-relaxed flex-grow">
                     {language === 'en' ? product.description : product.descriptionRu}
                   </p>
 
@@ -637,24 +637,24 @@ export default function FishShop() {
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-sunbeam-400 to-sunbeam-600 rounded-full flex items-center justify-center">
               <span className="text-2xl">💎</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].quality}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].qualityDesc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{t[language].quality}</h3>
+            <p className="text-gray-900 text-sm leading-relaxed">{t[language].qualityDesc}</p>
           </div>
 
           <div className="feature-card text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-warm-400 to-warm-600 rounded-full flex items-center justify-center">
               <span className="text-2xl">📋</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].recipeWeBelieveIn}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].recipeWeBelieveInDesc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{t[language].recipeWeBelieveIn}</h3>
+            <p className="text-gray-900 text-sm leading-relaxed">{t[language].recipeWeBelieveInDesc}</p>
           </div>
 
           <div className="feature-card text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
               <span className="text-2xl">❤️</span>
             </div>
-            <h3 className="text-xl font-bold text-warm-800 mb-2">{t[language].workWithSoul}</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">{t[language].workWithSoulDesc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{t[language].workWithSoul}</h3>
+            <p className="text-gray-900 text-sm leading-relaxed">{t[language].workWithSoulDesc}</p>
           </div>
         </div>
       </section>
@@ -665,30 +665,30 @@ export default function FishShop() {
         <div className="glass-warm max-w-md mx-auto p-6 rounded-xl text-center">
           <div className="space-y-4">
             <div>
-              <p className="text-warm-600 font-medium">{t[language].email}</p>
+              <p className="text-gray-900 font-medium">{t[language].email}</p>
               <a
                 href="mailto:sunbeam.th.co@gmail.com"
-                className="text-warm-700 hover:text-warm-800 transition-colors"
+                className="text-gray-900 hover:text-gray-900 transition-colors"
               >
                 sunbeam.th.co@gmail.com
               </a>
             </div>
 
             <div>
-              <p className="text-warm-600 font-medium">{t[language].whatsapp}</p>
+              <p className="text-gray-900 font-medium">{t[language].whatsapp}</p>
               <a
                 href="https://wa.me/66650673689"
                 target="_blank"
-                className="text-warm-700 hover:text-warm-800 transition-colors"
+                className="text-gray-900 hover:text-gray-900 transition-colors"
               >
                 +66650673689
               </a>
             </div>
 
-            <p className="text-warm-500 text-sm mt-4">
+            <p className="text-gray-700 text-sm mt-4">
               {t[language].orderInfo}
             </p>
-            <p className="text-warm-600 text-sm mt-2 font-medium">
+            <p className="text-gray-900 text-sm mt-2 font-medium">
               {t[language].minOrder}
             </p>
           </div>
@@ -721,7 +721,7 @@ export default function FishShop() {
             <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
-                <h2 className="text-2xl font-bold text-warm-800">{t[language].cart}</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t[language].cart}</h2>
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -735,7 +735,7 @@ export default function FishShop() {
                     }
                   }}
                   disabled={isTogglingCart}
-                  className="text-warm-600 hover:text-warm-800 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-warm-100"
+                  className="text-gray-900 hover:text-gray-900 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                 >
                   ×
                 </button>
@@ -745,7 +745,7 @@ export default function FishShop() {
               <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4 overflow-hidden' : 'p-6'}`}>
                 {cart.length === 0 ? (
                   <div className={`text-center ${isInTelegram ? 'flex-1 flex items-center justify-center' : 'py-8'}`}>
-                    <p className="text-warm-600 text-lg">{t[language].empty}</p>
+                    <p className="text-gray-900 text-lg">{t[language].empty}</p>
                   </div>
                 ) : (
                   <>
@@ -773,10 +773,10 @@ export default function FishShop() {
                               {/* Product Info */}
                               <div className="flex-1">
                                 <div className={`${isInTelegram ? 'mb-2' : 'mb-3'}`}>
-                                  <h3 className={`font-semibold text-warm-800 leading-tight ${isInTelegram ? 'text-sm' : 'text-base'}`}>
+                                  <h3 className={`font-semibold text-gray-900 leading-tight ${isInTelegram ? 'text-sm' : 'text-base'}`}>
                                     {language === 'en' ? product.name : product.nameRu}
                                   </h3>
-                                  <p className={`text-warm-600 mt-1 ${isInTelegram ? 'text-xs' : 'text-sm'}`}>
+                                  <p className={`text-gray-900 mt-1 ${isInTelegram ? 'text-xs' : 'text-sm'}`}>
                                     {item.quantity} × {Math.round(item.weight / item.quantity)}g = {item.weight}g - <span className="font-semibold">฿{Math.round((product.price * item.weight) / 100)}</span>
                                   </p>
                                 </div>
@@ -787,11 +787,11 @@ export default function FishShop() {
                                       const weightPerItem = Math.round(item.weight / item.quantity)
                                       removeFromCart(item.id, weightPerItem)
                                     }}
-                                    className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
+                                    className={`bg-warm-200 hover:bg-warm-300 text-gray-900 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
                                   >
                                     −
                                   </button>
-                                  <span className={`font-bold text-warm-800 min-w-[2rem] text-center ${isInTelegram ? 'mx-4 text-lg' : 'mx-4 text-lg'}`}>
+                                  <span className={`font-bold text-gray-900 min-w-[2rem] text-center ${isInTelegram ? 'mx-4 text-lg' : 'mx-4 text-lg'}`}>
                                     {item.quantity}
                                   </span>
                                   <button
@@ -800,7 +800,7 @@ export default function FishShop() {
                                       const weightPerItem = Math.round(item.weight / item.quantity)
                                       addToCart(item.id, weightPerItem)
                                     }}
-                                    className={`bg-warm-200 hover:bg-warm-300 text-warm-800 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
+                                    className={`bg-warm-200 hover:bg-warm-300 text-gray-900 rounded-lg flex items-center justify-center font-bold ${isInTelegram ? 'w-8 h-8 text-base' : 'w-8 h-8'}`}
                                   >
                                     +
                                   </button>
@@ -815,13 +815,13 @@ export default function FishShop() {
                                         {/* Footer */}
                     <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'}`}>
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-lg font-bold text-warm-800">{t[language].currentWeight}</span>
-                        <span className="text-lg font-bold text-warm-800">{getTotalWeight()}g</span>
+                        <span className="text-lg font-bold text-gray-900">{t[language].currentWeight}</span>
+                        <span className="text-lg font-bold text-gray-900">{getTotalWeight()}g</span>
                       </div>
 
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-xl font-bold text-warm-800">{t[language].total}:</span>
-                        <span className="text-xl font-bold text-warm-800">฿{getTotalPrice()}</span>
+                        <span className="text-xl font-bold text-gray-900">{t[language].total}:</span>
+                        <span className="text-xl font-bold text-gray-900">฿{getTotalPrice()}</span>
                       </div>
 
                       {getTotalWeight() < 300 ? (
@@ -876,21 +876,21 @@ export default function FishShop() {
             <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
-                <h2 className="text-2xl font-bold text-warm-800">{t[language].orderForm}</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t[language].orderForm}</h2>
                 <button
                   onClick={() => setShowOrderForm(false)}
-                  className="text-warm-600 hover:text-warm-800 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-warm-100"
+                  className="text-gray-900 hover:text-gray-900 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                 >
                   ×
                 </button>
               </div>
 
               {/* Form Content */}
-              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4' : 'p-6'}`}>
-                <div className="space-y-6">
+              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4 overflow-y-auto' : 'p-6'}`}>
+                <div className={`${isInTelegram ? 'space-y-4' : 'space-y-6'}`}>
                   {/* WhatsApp Number Field */}
                   <div>
-                    <label className="block text-warm-800 font-semibold mb-2">
+                    <label className="block text-gray-900 font-semibold mb-2">
                       {t[language].whatsappLabel}
                     </label>
                     <input
@@ -902,13 +902,13 @@ export default function FishShop() {
                         setCustomerDetails({...customerDetails, whatsapp: value})
                       }}
                       placeholder={language === 'en' ? '+66 650 673 689' : '+66 650 673 689'}
-                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800"
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-gray-900"
                     />
                   </div>
 
                   {/* Google Maps URL Field */}
                   <div>
-                    <label className="block text-warm-800 font-semibold mb-2">
+                    <label className="block text-gray-900 font-semibold mb-2">
                       {t[language].mapsLabel}
                     </label>
                     <input
@@ -916,13 +916,13 @@ export default function FishShop() {
                       value={customerDetails.mapsUrl}
                       onChange={(e) => setCustomerDetails({...customerDetails, mapsUrl: e.target.value})}
                       placeholder={t[language].mapsPlaceholder}
-                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800"
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-gray-900"
                     />
                   </div>
 
                   {/* Comment Field */}
                   <div>
-                    <label className="block text-warm-800 font-semibold mb-2">
+                    <label className="block text-gray-900 font-semibold mb-2">
                       {t[language].locationLabel}
                     </label>
                     <textarea
@@ -930,16 +930,16 @@ export default function FishShop() {
                       onChange={(e) => setCustomerDetails({...customerDetails, location: e.target.value})}
                       placeholder={t[language].locationPlaceholder}
                       rows={3}
-                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-warm-800 resize-none"
+                      className="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-warm-500 focus:outline-none bg-white text-gray-900 resize-none"
                     />
                   </div>
                 </div>
 
                 {/* Form Footer */}
-                <div className={`mt-6 space-y-3 ${isInTelegram ? 'mt-auto' : ''}`}>
+                <div className={`${isInTelegram ? 'mt-auto pt-4 bg-warm-50/50 border-t border-warm-200 mx-[-1rem] px-4 pb-4 space-y-2' : 'mt-6 space-y-3'}`}>
                   <button
                     onClick={handleConfirmOrder}
-                    className="w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-200"
+                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
                   >
                     {t[language].confirmOrder}
                   </button>
@@ -949,7 +949,7 @@ export default function FishShop() {
                       setShowOrderForm(false);
                       setIsCartOpen(true);
                     }}
-                    className="w-full bg-warm-200 hover:bg-warm-300 text-warm-800 font-bold py-3 px-6 rounded-lg transition-all duration-200"
+                    className={`w-full bg-warm-200 hover:bg-warm-300 text-gray-900 font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
                   >
                     {t[language].backToCart}
                   </button>
@@ -982,13 +982,13 @@ export default function FishShop() {
             <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-3 pb-3' : 'p-6 mb-6 pb-4'}`}>
-                <h2 className={`font-bold text-warm-800 ${isInTelegram ? 'text-lg' : 'text-2xl'}`}>{t[language].selectWeight}</h2>
-                <button
-                  onClick={() => setSelectedProduct(null)}
-                  className={`text-warm-600 hover:text-warm-800 font-bold flex items-center justify-center rounded-full hover:bg-warm-100 ${isInTelegram ? 'text-2xl w-8 h-8' : 'text-3xl w-10 h-10'}`}
-                >
-                  ×
-                </button>
+                <h2 className={`font-bold text-gray-900 ${isInTelegram ? 'text-lg' : 'text-2xl'}`}>{t[language].selectWeight}</h2>
+                                  <button
+                    onClick={() => setSelectedProduct(null)}
+                    className={`text-gray-600 hover:text-gray-900 font-bold flex items-center justify-center rounded-full hover:bg-gray-100 ${isInTelegram ? 'text-2xl w-8 h-8' : 'text-3xl w-10 h-10'}`}
+                  >
+                    ×
+                  </button>
               </div>
 
               {/* Content */}
@@ -1016,10 +1016,10 @@ export default function FishShop() {
 
                   {/* Product Info - Right Side */}
                   <div className="flex-1 min-h-0">
-                    <h3 className={`font-bold text-warm-800 mt-0 leading-tight ${isInTelegram ? 'text-sm mb-1' : 'text-lg mb-2'}`}>
+                    <h3 className={`font-bold text-gray-900 mt-0 leading-tight ${isInTelegram ? 'text-xs mb-1' : 'text-lg mb-2'}`}>
                       {language === 'en' ? selectedProduct.name : selectedProduct.nameRu}
                     </h3>
-                    <div className={`text-warm-600 leading-relaxed ${isInTelegram ? 'text-xs' : 'text-sm'} whitespace-normal break-words overflow-y-auto`}>
+                    <div className={`text-gray-900 leading-relaxed ${isInTelegram ? 'text-xs' : 'text-sm'} whitespace-normal break-words`}>
                       {language === 'en' ? selectedProduct.description : selectedProduct.descriptionRu}
                     </div>
                   </div>
@@ -1027,21 +1027,21 @@ export default function FishShop() {
 
                 {/* Weight Options */}
                 <div className={`${isInTelegram ? 'mb-2' : 'mb-3'} flex-shrink-0`}>
-                  <h4 className={`font-semibold text-warm-800 ${isInTelegram ? 'text-sm mb-1.5' : 'text-base mb-2'}`}>{t[language].weightOptions}</h4>
+                  <h4 className={`font-semibold text-gray-900 ${isInTelegram ? 'text-xs mb-1' : 'text-base mb-2'}`}>{t[language].weightOptions}</h4>
                   <div className={`${isInTelegram ? 'space-y-1' : 'space-y-1.5'}`}>
                     {[300, 400, 500].map((weight) => (
                       <button
                         key={weight}
                         onClick={() => setSelectedWeight(weight)}
-                        className={`w-full rounded-lg border-2 transition-all duration-200 ${isInTelegram ? 'p-1.5' : 'p-2'} ${
+                        className={`w-full rounded-lg border-2 transition-all duration-200 ${isInTelegram ? 'p-1' : 'p-2'} ${
                           selectedWeight === weight
                             ? 'border-warm-500 bg-warm-50'
                             : 'border-warm-200 bg-white hover:border-warm-300'
                         }`}
                       >
                         <div className="flex justify-between items-center">
-                          <span className={`font-semibold text-warm-800 ${isInTelegram ? 'text-sm' : 'text-base'}`}>{weight}g</span>
-                          <span className={`font-bold text-warm-700 ${isInTelegram ? 'text-sm' : 'text-base'}`}>
+                          <span className={`font-semibold text-gray-900 ${isInTelegram ? 'text-xs' : 'text-base'}`}>{weight}g</span>
+                          <span className={`font-bold text-gray-900 ${isInTelegram ? 'text-xs' : 'text-base'}`}>
                             ฿{Math.round(selectedProduct.price * (weight / 100))}
                           </span>
                         </div>
@@ -1051,10 +1051,10 @@ export default function FishShop() {
                 </div>
 
                 {/* Add to Cart Button */}
-                <div className={`${isInTelegram ? 'mt-auto pt-2' : ''}`}>
+                <div className={`${isInTelegram ? 'mt-auto pt-2 bg-warm-50/50 border-t border-warm-200 mx-[-0.75rem] px-3 pb-3' : ''}`}>
                   <button
                     onClick={() => addToCart(selectedProduct.id, selectedWeight)}
-                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-sm' : 'py-3 px-6 text-base'}`}
+                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2 px-3 text-xs' : 'py-3 px-6 text-base'}`}
                   >
                     {t[language].addToCart} ({selectedWeight}g - ฿{Math.round(selectedProduct.price * (selectedWeight / 100))})
                   </button>
@@ -1089,20 +1089,20 @@ export default function FishShop() {
                 </span>
               </div>
               <div className="text-left">
-                <div className="text-warm-800 font-semibold text-sm">
+                <div className="text-gray-900 font-semibold text-sm">
                   {getTotalItems()} {getTotalItems() === 1 ? t[language].item : t[language].items} • {getTotalWeight()}g
                 </div>
-                <div className="text-warm-600 text-xs">
+                <div className="text-gray-700 text-xs">
                   {t[language].cart}
                 </div>
               </div>
             </div>
 
             <div className="text-right">
-              <div className="text-warm-800 font-bold text-lg">
+              <div className="text-gray-900 font-bold text-lg">
                 ฿{Math.round(getTotalPrice())}
               </div>
-              <div className="text-warm-600 text-xs">
+              <div className="text-gray-700 text-xs">
                 {t[language].total}
               </div>
             </div>
