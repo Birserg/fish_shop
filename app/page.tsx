@@ -488,6 +488,11 @@ export default function FishShop() {
     )
   }
 
+  // Prevent hydration mismatch: render nothing until mounted on client
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <main className="min-h-screen sunbeam-hero pb-20 md:pb-0">
       {/* Top Navigation Bar */}
@@ -699,18 +704,18 @@ export default function FishShop() {
       {isCartOpen && (
         <div
           className={`fixed inset-0 bg-black/70 flex z-50 ${isInTelegram ? 'items-end' : 'items-center justify-center p-4'}`}
-                        onClick={(e) => {
-                if (e.target === e.currentTarget && !isTogglingCart) {
-                  setIsTogglingCart(true);
-                  setIsCartOpen(false);
-                  setShowOrderForm(false);
-                  setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
-                  setTimeout(() => setIsTogglingCart(false), 100);
-                }
-              }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !isTogglingCart) {
+              setIsTogglingCart(true);
+              setIsCartOpen(false);
+              setShowOrderForm(false);
+              setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
+              setTimeout(() => setIsTogglingCart(false), 100);
+            }
+          }}
         >
-                              <div
-            className={`cart-modal-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh]'} shadow-2xl overflow-hidden`}
+          <div
+            className={`cart-modal-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl flex flex-col' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh] flex flex-col'} shadow-2xl`}
             style={{
               background: 'linear-gradient(135deg, #fefdf8, #fffbeb)',
               border: '1px solid rgba(245, 158, 11, 0.2)',
@@ -718,7 +723,7 @@ export default function FishShop() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
+            <div className="flex flex-col h-full">
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
                 <h2 className="text-2xl font-bold text-gray-900">{t[language].cart}</h2>
@@ -742,7 +747,7 @@ export default function FishShop() {
               </div>
 
               {/* Content */}
-              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4 overflow-hidden' : 'p-6'}`}>
+              <div className="flex-1 overflow-y-auto p-4">
                 {cart.length === 0 ? (
                   <div className={`text-center ${isInTelegram ? 'flex-1 flex items-center justify-center' : 'py-8'}`}>
                     <p className="text-gray-900 text-lg">{t[language].empty}</p>
@@ -813,7 +818,7 @@ export default function FishShop() {
                     </div>
 
                                         {/* Footer */}
-                    <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'}`}>
+                    <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'} sticky bottom-0 z-10 bg-inherit`}>
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-lg font-bold text-gray-900">{t[language].currentWeight}</span>
                         <span className="text-lg font-bold text-gray-900">{getTotalWeight()}g</span>
@@ -865,7 +870,7 @@ export default function FishShop() {
           }}
         >
           <div
-            className={`order-form-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh]'} shadow-2xl overflow-hidden`}
+            className={`order-form-container ${isInTelegram ? 'w-full h-[90vh] rounded-t-3xl flex flex-col' : 'w-full max-w-lg mx-auto rounded-2xl max-h-[90vh] flex flex-col'} shadow-2xl`}
             style={{
               background: 'linear-gradient(135deg, #fefdf8, #fffbeb)',
               border: '1px solid rgba(245, 158, 11, 0.2)',
@@ -873,7 +878,7 @@ export default function FishShop() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`${isInTelegram ? 'h-full flex flex-col' : ''}`}>
+            <div className="flex flex-col h-full">
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
                 <h2 className="text-2xl font-bold text-gray-900">{t[language].orderForm}</h2>
@@ -886,7 +891,7 @@ export default function FishShop() {
               </div>
 
               {/* Form Content */}
-              <div className={`${isInTelegram ? 'flex-1 flex flex-col p-4 overflow-y-auto' : 'p-6'}`}>
+              <div className="flex-1 overflow-y-auto p-4">
                 <div className={`${isInTelegram ? 'space-y-4' : 'space-y-6'}`}>
                   {/* WhatsApp Number Field */}
                   <div>
@@ -934,26 +939,26 @@ export default function FishShop() {
                     />
                   </div>
                 </div>
+              </div>
 
-                {/* Form Footer */}
-                <div className={`${isInTelegram ? 'mt-auto pt-4 bg-warm-50/50 border-t border-warm-200 mx-[-1rem] px-4 pb-4 space-y-2' : 'mt-6 space-y-3'}`}>
-                  <button
-                    onClick={handleConfirmOrder}
-                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
-                  >
-                    {t[language].confirmOrder}
-                  </button>
+              {/* Form Footer */}
+              <div className={`${isInTelegram ? 'mt-auto pt-4 bg-warm-50/50 border-t border-warm-200 mx-[-1rem] px-4 pb-4 space-y-2' : 'mt-6 space-y-3'} sticky bottom-0 z-10 bg-inherit`}>
+                <button
+                  onClick={handleConfirmOrder}
+                  className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
+                >
+                  {t[language].confirmOrder}
+                </button>
 
-                  <button
-                    onClick={() => {
-                      setShowOrderForm(false);
-                      setIsCartOpen(true);
-                    }}
-                    className={`w-full bg-warm-200 hover:bg-warm-300 text-gray-900 font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
-                  >
-                    {t[language].backToCart}
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    setShowOrderForm(false);
+                    setIsCartOpen(true);
+                  }}
+                  className={`w-full bg-warm-200 hover:bg-warm-300 text-gray-900 font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2.5 px-4 text-base' : 'py-3 px-6 text-lg'}`}
+                >
+                  {t[language].backToCart}
+                </button>
               </div>
             </div>
           </div>
@@ -1033,15 +1038,15 @@ export default function FishShop() {
                       <button
                         key={weight}
                         onClick={() => setSelectedWeight(weight)}
-                        className={`w-full rounded-lg border-2 transition-all duration-200 ${isInTelegram ? 'p-1' : 'p-2'} ${
+                        className={`w-full rounded-lg border-2 transition-all duration-200 ${isInTelegram ? 'p-2' : 'p-2'} ${
                           selectedWeight === weight
                             ? 'border-warm-500 bg-warm-50'
                             : 'border-warm-200 bg-white hover:border-warm-300'
                         }`}
                       >
                         <div className="flex justify-between items-center">
-                          <span className={`font-semibold text-gray-900 ${isInTelegram ? 'text-xs' : 'text-base'}`}>{weight}g</span>
-                          <span className={`font-bold text-gray-900 ${isInTelegram ? 'text-xs' : 'text-base'}`}>
+                          <span className={`font-semibold text-gray-900 ${isInTelegram ? 'text-sm' : 'text-base'}`}>{weight}g</span>
+                          <span className={`font-bold text-gray-900 ${isInTelegram ? 'text-sm' : 'text-base'}`}>
                             ฿{Math.round(selectedProduct.price * (weight / 100))}
                           </span>
                         </div>
@@ -1054,7 +1059,7 @@ export default function FishShop() {
                 <div className={`${isInTelegram ? 'mt-auto pt-2 bg-warm-50/50 border-t border-warm-200 mx-[-0.75rem] px-3 pb-3' : ''}`}>
                   <button
                     onClick={() => addToCart(selectedProduct.id, selectedWeight)}
-                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-2 px-3 text-xs' : 'py-3 px-6 text-base'}`}
+                    className={`w-full bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white font-bold rounded-lg transition-all duration-200 ${isInTelegram ? 'py-3 px-4 text-sm' : 'py-3 px-6 text-base'}`}
                   >
                     {t[language].addToCart} ({selectedWeight}g - ฿{Math.round(selectedProduct.price * (selectedWeight / 100))})
                   </button>
