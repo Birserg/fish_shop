@@ -156,7 +156,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <div className="min-h-screen telegram-bg">
+        <div className="min-h-screen">
           {children}
         </div>
         <Toaster
