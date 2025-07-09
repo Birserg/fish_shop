@@ -426,8 +426,8 @@ export default function FishShop() {
     const totalPrice = getTotalPrice()
 
     const message = language === 'en'
-      ? `*Order from Sunbeam Fish Shop*\n\n*Customer Details:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Location: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Comment: ${customerDetails.location}` : ''}\n\n*Items:*\n${orderText}\n\n*Total Weight: ${totalWeight}g*\n*Total: ฿${Math.round(totalPrice)}*\n\nThank you for your order!`
-      : `*Заказ из рыбного магазина Sunbeam*\n\n*Данные клиента:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Адрес: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Комментарий: ${customerDetails.location}` : ''}\n\n*Товары:*\n${orderText}\n\n*Общий вес: ${totalWeight}г*\n*Итого: ฿${Math.round(totalPrice)}*\n\nСпасибо за ваш заказ!`
+      ? `*Order from Sunbeam Shop*\n\n*Customer Details:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Location: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Comment: ${customerDetails.location}` : ''}\n\n*Items:*\n${orderText}\n\n*Total Weight: ${totalWeight}g*\n*Total: ฿${Math.round(totalPrice)}*\n\nThank you for your order!`
+      : `*Заказ из магазина Sunbeam*\n\n*Данные клиента:*\n📱 WhatsApp: ${customerDetails.whatsapp}\n📍 Адрес: ${customerDetails.mapsUrl}${customerDetails.location ? `\n💬 Комментарий: ${customerDetails.location}` : ''}\n\n*Товары:*\n${orderText}\n\n*Общий вес: ${totalWeight}г*\n*Итого: ฿${Math.round(totalPrice)}*\n\nСпасибо за ваш заказ!`
 
     const whatsappUrl = `https://wa.me/66650673689?text=${encodeURIComponent(message)}`
 
