@@ -25,7 +25,7 @@ const products: Product[] = [
     nameRu: "Семга оригинальная слабосоленая",
     description: "Fresh Norwegian premium-grade salmon, cured using traditional two-stage dry salting technique. Delicate structure, noble richness and refined taste with natural sweet notes.",
     descriptionRu: "Свежая норвежская сёмга премиум-класса, выдержанная по двухэтапной технологии сухого посола. Тонкая структура, благородная жирность и деликатный вкус с естественными сладковатыми нотами.",
-    price: 180,
+    price: 200,
     image: "/fish_1.jpg",
     badge: "Traditional",
     badgeRu: "Традиционная",
@@ -37,7 +37,7 @@ const products: Product[] = [
     nameRu: "Семга с цитрусом",
     description: "Premium Norwegian salmon prepared using our signature dry salting method with fresh lemon zest added at the final stage. The citrus subtly transforms the texture, giving it softness and freshness. The taste is structured, with a bright yet refined aromatic accent.",
     descriptionRu: "Премиальная норвежская сёмга, приготовленная по авторскому методу сухого посола с добавлением свежей лимонной цедры на финальном этапе. Цитрус тонко трансформирует текстуру, придавая ей мягкость и свежесть. Вкус - структурированный, с ярким, но утончённым ароматическим акцентом.",
-    price: 180,
+    price: 200,
     image: "/fish_2.jpg",
     badge: "Signature",
     badgeRu: "Фирменная",
@@ -49,7 +49,7 @@ const products: Product[] = [
     nameRu: "Семга подкопченная",
     description: "Premium Norwegian salmon that underwent two-stage dry salting and gentle cold smoking on natural wood chips. Dense texture, expressive oiliness and noble smoky profile. Balanced product with depth of flavor and mature aftertaste.",
     descriptionRu: "Норвежская сёмга высшего качества, прошедшая двухступенчатый сухой посол и щадящее холодное копчение на натуральной щепе. Плотная текстура, выразительная маслянистость и благородный дымный профиль. Сбалансированный продукт с глубиной вкуса и зрелым послевкусием.",
-    price: 180,
+    price: 200,
     image: "/smoked_fish.jpg",
     badge: "Artisan",
     badgeRu: "Ремесленная",
@@ -57,18 +57,6 @@ const products: Product[] = [
   },
   {
     id: 4,
-    name: "Premium Sashimi Salmon",
-    nameRu: "Премиальная сёмга для сашими",
-    description: "Premium Norwegian salmon of the highest grade, selected and prepared according to strict Japanese sashimi standards. Minimal processing to preserve natural texture and flavor. Perfect for raw consumption - pure, concentrated ocean taste with silky structure.",
-    descriptionRu: "Норвежская сёмга высшего сорта, отобранная и приготовленная по строгим японским стандартам сашими. Минимальная обработка для сохранения натуральной текстуры и вкуса. Идеально подходит для употребления в сыром виде - чистый, концентрированный вкус океана с шелковистой структурой.",
-    price: 220,
-    image: "/fish_4.jpg",
-    badge: "Premium",
-    badgeRu: "Премиум",
-    type: 'fish'
-  },
-  {
-    id: 5,
     name: "Top Blade Steak",
     nameRu: "Топ Блейд Стейк",
     description: "Juicy and aromatic steak from the shoulder part of beef. Features a bright meaty flavor, moderate marbling and rich texture. When properly prepared, it becomes tender and soft, especially good in medium rare cooking. Suitable for grilling, pan-frying or baking. Perfect choice for connoisseurs of real meaty taste.",
@@ -80,7 +68,7 @@ const products: Product[] = [
     type: 'meat'
   },
   {
-    id: 6,
+    id: 5,
     name: "Burger Patty",
     nameRu: "Котлета для бургера",
     description: "Juicy, meaty patty made from 100% beef - no additives, just pure meat flavor. Perfectly balanced fat content for even cooking and rich taste. Retains juiciness inside and forms an appetizing crust outside. Created specifically for classic and signature burger recipes.",
@@ -846,9 +834,9 @@ export default function FishShop() {
             <p className="text-gray-700 text-sm mt-4">
               {t[language].orderInfo}
             </p>
-            <p className="text-gray-900 text-sm mt-2 font-medium">
+            {/* <p className="text-gray-900 text-sm mt-2 font-medium">
               {t[language].minOrder}
-            </p>
+            </p> */}
           </div>
         </div>
       </section>
@@ -986,7 +974,7 @@ export default function FishShop() {
                       })}
                     </div>
 
-                                        {/* Footer */}
+                    {/* Footer */}
                     <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'} sticky bottom-0 z-10 bg-inherit`}>
                       {getTotalWeight() > 0 && (
                         <div className="flex justify-between items-center mb-1">
@@ -1000,7 +988,7 @@ export default function FishShop() {
                         <span className="text-xl font-bold text-gray-900">฿{getTotalPrice()}</span>
                       </div>
 
-                      {(() => {
+                      {/* {(() => {
                         const totalWeight = getTotalWeight()
                         const hasFishProducts = cart.some(item => {
                           const product = products.find(p => p.id === item.id)
@@ -1021,7 +1009,7 @@ export default function FishShop() {
                           )
                         }
                         return null
-                      })()}
+                      })()} */}
 
                       <button
                         onClick={handleOrder}
