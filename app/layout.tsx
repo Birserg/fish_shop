@@ -79,11 +79,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className="scroll-smooth">
+    <html lang="ru" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <Script
           src="https://telegram.org/js/telegram-web-app.js"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <Script
           id="structured-data"

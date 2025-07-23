@@ -15,6 +15,7 @@ interface Product {
   image: string
   badge?: string
   badgeRu?: string
+  type: 'fish' | 'meat'
 }
 
 const products: Product[] = [
@@ -27,18 +28,20 @@ const products: Product[] = [
     price: 180,
     image: "/fish_1.jpg",
     badge: "Traditional",
-    badgeRu: "Традиционная"
+    badgeRu: "Традиционная",
+    type: 'fish'
   },
   {
     id: 2,
     name: "Salmon with Citrus",
     nameRu: "Семга с цитрусом",
     description: "Premium Norwegian salmon prepared using our signature dry salting method with fresh lemon zest added at the final stage. The citrus subtly transforms the texture, giving it softness and freshness. The taste is structured, with a bright yet refined aromatic accent.",
-    descriptionRu: "Премиальная норвежская сёмга, приготовленная по авторскому методу сухого посола с добавлением свежей лимонной цедры на финальном этапе. Цитрус тонко трансформирует текстуру, придавая ей мягкость и свежесть. Вкус — структурированный, с ярким, но утончённым ароматическим акцентом.",
+    descriptionRu: "Премиальная норвежская сёмга, приготовленная по авторскому методу сухого посола с добавлением свежей лимонной цедры на финальном этапе. Цитрус тонко трансформирует текстуру, придавая ей мягкость и свежесть. Вкус - структурированный, с ярким, но утончённым ароматическим акцентом.",
     price: 180,
     image: "/fish_2.jpg",
     badge: "Signature",
-    badgeRu: "Фирменная"
+    badgeRu: "Фирменная",
+    type: 'fish'
   },
   {
     id: 3,
@@ -47,20 +50,46 @@ const products: Product[] = [
     description: "Premium Norwegian salmon that underwent two-stage dry salting and gentle cold smoking on natural wood chips. Dense texture, expressive oiliness and noble smoky profile. Balanced product with depth of flavor and mature aftertaste.",
     descriptionRu: "Норвежская сёмга высшего качества, прошедшая двухступенчатый сухой посол и щадящее холодное копчение на натуральной щепе. Плотная текстура, выразительная маслянистость и благородный дымный профиль. Сбалансированный продукт с глубиной вкуса и зрелым послевкусием.",
     price: 180,
-    image: "/fish_3.jpg",
+    image: "/smoked_fish.jpg",
     badge: "Artisan",
-    badgeRu: "Ремесленная"
+    badgeRu: "Ремесленная",
+    type: 'fish'
   },
   {
     id: 4,
     name: "Premium Sashimi Salmon",
     nameRu: "Премиальная сёмга для сашими",
-    description: "Premium Norwegian salmon of the highest grade, selected and prepared according to strict Japanese sashimi standards. Minimal processing to preserve natural texture and flavor. Perfect for raw consumption — pure, concentrated ocean taste with silky structure.",
-    descriptionRu: "Норвежская сёмга высшего сорта, отобранная и приготовленная по строгим японским стандартам сашими. Минимальная обработка для сохранения натуральной текстуры и вкуса. Идеально подходит для употребления в сыром виде — чистый, концентрированный вкус океана с шелковистой структурой.",
+    description: "Premium Norwegian salmon of the highest grade, selected and prepared according to strict Japanese sashimi standards. Minimal processing to preserve natural texture and flavor. Perfect for raw consumption - pure, concentrated ocean taste with silky structure.",
+    descriptionRu: "Норвежская сёмга высшего сорта, отобранная и приготовленная по строгим японским стандартам сашими. Минимальная обработка для сохранения натуральной текстуры и вкуса. Идеально подходит для употребления в сыром виде - чистый, концентрированный вкус океана с шелковистой структурой.",
     price: 220,
     image: "/fish_4.jpg",
     badge: "Premium",
-    badgeRu: "Премиум"
+    badgeRu: "Премиум",
+    type: 'fish'
+  },
+  {
+    id: 5,
+    name: "Top Blade Steak",
+    nameRu: "Топ Блейд Стейк",
+    description: "Juicy and aromatic steak from the shoulder part of beef. Features a bright meaty flavor, moderate marbling and rich texture. When properly prepared, it becomes tender and soft, especially good in medium rare cooking. Suitable for grilling, pan-frying or baking. Perfect choice for connoisseurs of real meaty taste.",
+    descriptionRu: "Сочный и ароматный стейк из лопаточной части говядины. Отличается ярким мясным вкусом, умеренной мраморностью и насыщенной текстурой. При правильном приготовлении становится мягким и нежным, особенно хорош в прожарке medium rare. Подходит для жарки на гриле, сковороде или запекания. Идеальный выбор для ценителей настоящего мясного вкуса.",
+    price: 500,
+    image: "/steak.jpg",
+    badge: "Fresh",
+    badgeRu: "Свежий",
+    type: 'meat'
+  },
+  {
+    id: 6,
+    name: "Burger Patty",
+    nameRu: "Котлета для бургера",
+    description: "Juicy, meaty patty made from 100% beef - no additives, just pure meat flavor. Perfectly balanced fat content for even cooking and rich taste. Retains juiciness inside and forms an appetizing crust outside. Created specifically for classic and signature burger recipes.",
+    descriptionRu: "Сочная, мясистая котлета из 100% говядины — без добавок, только чистый вкус мяса. Идеально сбалансирована по жирности для равномерной прожарки и насыщенного вкуса. Сохраняет сочность внутри и образует аппетитную корочку снаружи. Создана специально для классических и авторских рецептов бургеров.",
+    price: 200,
+    image: "/cutlet.jpg",
+    badge: "100% Beef",
+    badgeRu: "100% Говядина",
+    type: 'meat'
   }
 ]
 
@@ -76,7 +105,6 @@ export default function FishShop() {
   const [cart, setCart] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [language, setLanguage] = useState<Language>('ru')
-  const [loading, setLoading] = useState(true)
   const [isInTelegram, setIsInTelegram] = useState(false)
   const [isTogglingCart, setIsTogglingCart] = useState(false)
   const [showOrderForm, setShowOrderForm] = useState(false)
@@ -88,13 +116,14 @@ export default function FishShop() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedWeight, setSelectedWeight] = useState(300)
   const [isMounted, setIsMounted] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   const t = {
     en: {
       title: "Sunbeam",
       subtitle: "Premium Norwegian Salmon",
       description: "Experience the authentic taste of Norway with our premium salmon collection",
-      positioning: "We are a small team that knows what good salmon is all about. We prepare it using a proven recipe — with attention to every detail and respect for quality. Our lightly salted and smoked salmon is what true connoisseurs seek: rich flavor, perfect texture, and nothing unnecessary.",
+      positioning: "We are a small team that knows what good salmon is all about. We prepare it using a proven recipe - with attention to every detail and respect for quality. Our lightly salted and smoked salmon is what true connoisseurs seek: rich flavor, perfect texture, and nothing unnecessary.",
       addToCart: "Add to Cart",
       orderButton: "Order",
       orderMore: "Order More",
@@ -131,20 +160,21 @@ export default function FishShop() {
       quality: "Quality",
       qualityDesc: "We work only with chilled premium Norwegian salmon. Every batch passes through the hands of those who know exactly how perfect curing should look and feel.",
       recipeWeBelieveIn: "Recipe We Believe In",
-      recipeWeBelieveInDesc: "We've worked long to achieve our taste. We measure everything precisely: salt, aging time, temperature. This gives consistent, clean results — no accidents.",
+      recipeWeBelieveInDesc: "We've worked long to achieve our taste. We measure everything precisely: salt, aging time, temperature. This gives consistent, clean results - no accidents.",
       workWithSoul: "Work with Soul and Taste",
-      workWithSoulDesc: "We don't make 'just fish' — we truly care about how it looks, how it sits on bread, how the flavor unfolds. All of this is part of our approach that we believe in.",
+      workWithSoulDesc: "We don't make 'just fish' - we truly care about how it looks, how it sits on bread, how the flavor unfolds. All of this is part of our approach that we believe in.",
       selectWeight: "Select Weight",
       weightOptions: "Weight Options",
       close: "Close",
       item: "item",
-      items: "items"
+      items: "items",
+      clearCart: "Clear Cart"
     },
     ru: {
       title: "Рыбный магазин Sunbeam",
       subtitle: "Премиальная норвежская семга",
       description: "Попробуйте подлинный вкус Норвегии с нашей премиальной коллекцией семги",
-      positioning: "Мы — небольшая команда, которая знает толк в хорошей сёмге. Делаем её по проверенному рецепту — с вниманием к каждой детали и уважением к качеству. Наша слабосолёная и копчёная сёмга — то, что ищут настоящие ценители: насыщенный вкус, правильная текстура и ни капли лишнего",
+      positioning: "Мы - команда, которая знает толк в хорошей сёмге. Делаем её по проверенному рецепту - с вниманием к каждой детали и уважением к качеству. Наша слабосолёная и копчёная сёмга - то, что ищут настоящие ценители: насыщенный вкус, правильная текстура и ни капли лишнего",
       addToCart: "В корзину",
       orderButton: "Заказать",
       orderMore: "Заказать ещё",
@@ -181,20 +211,28 @@ export default function FishShop() {
       quality: "Качество",
       qualityDesc: "Мы работаем только с охлаждённой норвежской сёмгой премиум-класса. Каждая партия проходит через руки тех, кто точно знает, как должна выглядеть и ощущаться идеальная засолка.",
       recipeWeBelieveIn: "Рецепт, в который верим",
-      recipeWeBelieveInDesc: "Мы долго шли к своему вкусу. Отмеряем всё с точностью: соль, выдержку, температуру. Это даёт стабильный, чистый результат — без случайностей.",
+      recipeWeBelieveInDesc: "Мы долго шли к своему вкусу. Отмеряем всё с точностью: соль, выдержку, температуру. Это даёт стабильный, чистый результат - без случайностей.",
       workWithSoul: "Работа с душой и вкусом",
-      workWithSoulDesc: "Мы не делаем \"просто рыбу\" — нам по-настоящему важно, как она выглядит, как ложится на хлеб, как раскрывается вкус. Всё это — часть нашего подхода, в котором мы уверены.",
+      workWithSoulDesc: "Мы не делаем \"просто рыбу\" - нам по-настоящему важно, как она выглядит, как ложится на хлеб, как раскрывается вкус. Всё это - часть нашего подхода, в котором мы уверены.",
       selectWeight: "Выберите вес",
       weightOptions: "Варианты веса",
       close: "Закрыть",
       item: "товар",
-      items: "товаров"
+      items: "товаров",
+      clearCart: "Очистить корзину"
     }
   }
 
-  // Initialize component
+  // Hydration effect
   useEffect(() => {
-    const initializeApp = () => {
+    setIsMounted(true)
+  }, [])
+
+  // Initialize component after hydration
+  useEffect(() => {
+    if (!isMounted) return
+
+    const timer = setTimeout(() => {
       // Telegram WebApp setup - only if actually running in Telegram
       if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
         const tg = window.Telegram.WebApp
@@ -213,9 +251,7 @@ export default function FishShop() {
             setLanguage('ru') // Default to Russian
           }
 
-          // Running in Telegram WebApp
-
-                    // Set up main button for Telegram
+          // Set up main button for Telegram
           if (tg.MainButton) {
             tg.MainButton.setText('🛒 Open Cart')
             tg.MainButton.color = '#f59e0b'
@@ -251,25 +287,24 @@ export default function FishShop() {
         }
       }
 
-      setLoading(false)
-      setIsMounted(true)
-    }
+      setIsHydrated(true)
+    }, 100)
 
-    initializeApp()
-  }, [])
+    return () => clearTimeout(timer)
+  }, [isMounted])
 
-  // Welcome message after mount
+  // Welcome message after hydration
   useEffect(() => {
-    if (isMounted) {
+    if (isHydrated) {
       setTimeout(() => {
         toast.success(t[language].welcomeBack)
       }, 500)
     }
-  }, [isMounted]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isHydrated]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Save to localStorage when cart or language changes
+  // Save to localStorage when cart changes
   useEffect(() => {
-    if (!loading && typeof window !== 'undefined') {
+    if (isHydrated && typeof window !== 'undefined') {
       localStorage.setItem('cart', JSON.stringify(cart))
 
       // Update Telegram main button
@@ -284,17 +319,22 @@ export default function FishShop() {
         }
       }
     }
-  }, [cart, loading])
+  }, [cart, isHydrated])
 
   useEffect(() => {
-    if (!loading && typeof window !== 'undefined') {
+    if (isHydrated && typeof window !== 'undefined') {
       localStorage.setItem('language', language)
     }
-  }, [language, loading])
+  }, [language, isHydrated])
 
   // Cart functions
   const addToCart = (productId: number, weight: number = 100) => {
     const product = products.find(p => p.id === productId)
+
+    if (!product) {
+      console.error('Product not found:', productId)
+      return
+    }
 
     setCart(prev => {
       // Find existing item with the SAME weight (not just same product)
@@ -313,8 +353,8 @@ export default function FishShop() {
     // Analytics tracking
     track('add_to_cart', {
       product_id: productId,
-      product_name: (language === 'en' ? product?.name : product?.nameRu) || 'unknown',
-      price: product?.price || 0,
+      product_name: (language === 'en' ? product.name : product.nameRu) || 'unknown',
+      price: product.price || 0,
       weight: weight,
       platform: isInTelegram ? 'telegram' : 'web',
       language: language
@@ -360,7 +400,13 @@ export default function FishShop() {
   const getTotalPrice = () => {
     return cart.reduce((total, item) => {
       const product = products.find(p => p.id === item.id)
-      return total + (product ? (product.price * item.weight) / 100 : 0)
+      if (!product) return total
+
+      if (product.type === 'meat') {
+        return total + (product.price * item.quantity)
+      } else {
+        return total + (product.price * item.weight) / 100
+      }
     }, 0)
   }
 
@@ -369,7 +415,18 @@ export default function FishShop() {
   }
 
   const getTotalWeight = () => {
-    return cart.reduce((total, item) => total + item.weight, 0)
+    return cart.reduce((total, item) => {
+      const product = products.find(p => p.id === item.id)
+      if (product && product.type === 'fish') {
+        return total + item.weight
+      }
+      return total
+    }, 0)
+  }
+
+  const clearCart = () => {
+    setCart([])
+    toast.success(language === 'en' ? 'Cart cleared' : 'Корзина очищена')
   }
 
   const getCartItemQuantity = (productId: number) => {
@@ -379,11 +436,16 @@ export default function FishShop() {
       .reduce((total, item) => total + item.quantity, 0)
   }
 
-    const handleOrder = () => {
+  const handleOrder = () => {
     if (cart.length === 0) return
 
     const totalWeight = getTotalWeight()
-    if (totalWeight < 300) {
+    const hasFishProducts = cart.some(item => {
+      const product = products.find(p => p.id === item.id)
+      return product && product.type === 'fish'
+    })
+
+    if (hasFishProducts && totalWeight < 300) {
       const needed = 300 - totalWeight
       const message = t[language].needMore.replace('{{amount}}', needed.toString())
       toast.error(message)
@@ -419,8 +481,14 @@ export default function FishShop() {
     const orderText = cart.map((item, index) => {
       const product = products.find(p => p.id === item.id)
       const productName = language === 'en' ? product?.name : product?.nameRu
-      const totalPrice = product ? (product.price * item.weight) / 100 : 0
-      return `${index + 1}. ${productName} x${item.quantity} (${item.weight}g) - ฿${Math.round(totalPrice)}`
+
+      if (product?.type === 'meat') {
+        const totalPrice = product.price * item.quantity
+        return `${index + 1}. ${productName} x${item.quantity} items - ฿${Math.round(totalPrice)}`
+      } else {
+        const totalPrice = product ? (product.price * item.weight) / 100 : 0
+        return `${index + 1}. ${productName} x${item.quantity} (${item.weight}g) - ฿${Math.round(totalPrice)}`
+      }
     }).join('\n')
 
     const totalPrice = getTotalPrice()
@@ -450,17 +518,13 @@ export default function FishShop() {
 
     setTimeout(() => {
       if (isInTelegram && typeof window !== 'undefined' && window.Telegram?.WebApp) {
-        // For Telegram mini app, use openTelegramLink or openLink
+        // For Telegram mini app, use openLink (not openTelegramLink for external URLs)
         try {
-          window.Telegram.WebApp.openTelegramLink(whatsappUrl)
+          window.Telegram.WebApp.openLink(whatsappUrl)
         } catch {
-          try {
-            window.Telegram.WebApp.openLink(whatsappUrl)
-          } catch {
-            // Fallback to regular window.open
-            if (typeof window !== 'undefined') {
-              window.open(whatsappUrl, '_blank')
-            }
+          // Fallback to regular window.open
+          if (typeof window !== 'undefined') {
+            window.open(whatsappUrl, '_blank')
           }
         }
       } else {
@@ -477,7 +541,8 @@ export default function FishShop() {
     setSelectedWeight(300) // Default to 300g
   }
 
-  if (loading) {
+  // Prevent hydration mismatch: show loading until mounted on client
+  if (!isMounted) {
     return (
       <div className="min-h-screen flex items-center justify-center sunbeam-hero">
         <div className="text-center">
@@ -486,11 +551,6 @@ export default function FishShop() {
         </div>
       </div>
     )
-  }
-
-  // Prevent hydration mismatch: render nothing until mounted on client
-  if (!isMounted) {
-    return null;
   }
 
   return (
@@ -510,15 +570,42 @@ export default function FishShop() {
             />
           </div>
 
-          {/* Right Side - Phone, Cart (Web) and Language Toggle */}
+          {/* Right Side - Phone, Instagram, Cart (Web) and Language Toggle */}
           <div className="flex items-center gap-3">
             {/* Phone */}
             <a
               href="https://wa.me/66650673689"
               target="_blank"
-              className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-gray-900"
+              className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-gray-900 flex items-center justify-center w-24 sm:w-auto sm:min-w-[120px]"
             >
-              📞 +66650673689
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-green-600 sm:mr-1"
+              >
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+              </svg>
+              <span className="hidden sm:inline">+66650673689</span>
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/sunbeam_food_phuket?igsh=MXNxcnFsOXFlM2dhNg=="
+              target="_blank"
+              className="glass-warm px-3 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform text-gray-900 flex items-center justify-center w-24 sm:w-auto sm:min-w-[120px]"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-pink-600 sm:mr-1"
+              >
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.40s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              <span className="hidden sm:inline">Instagram</span>
             </a>
 
             {!isInTelegram && (
@@ -615,11 +702,17 @@ export default function FishShop() {
 
                   <div className="flex items-center justify-between mt-auto">
                     <span className="product-price text-lg sm:text-xl">
-                      ฿{product.price}{t[language].perGram}
+                      ฿{product.price}
                     </span>
 
                     <button
-                      onClick={() => openProductModal(product)}
+                      onClick={() => {
+                        if (product.type === 'meat') {
+                          addToCart(product.id, 1) // Add as single item for meat products
+                        } else {
+                          openProductModal(product) // Show weight selector for fish products
+                        }
+                      }}
                       className="logo-button text-sm sm:text-base px-4 py-2"
                       aria-label={`${t[language].orderButton}: ${language === 'en' ? product.name : product.nameRu}`}
                     >
@@ -727,23 +820,33 @@ export default function FishShop() {
               {/* Header */}
               <div className={`flex justify-between items-center border-b border-warm-200 ${isInTelegram ? 'p-4 pb-4' : 'p-6 mb-6 pb-4'}`}>
                 <h2 className="text-2xl font-bold text-gray-900">{t[language].cart}</h2>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (!isTogglingCart) {
-                      setIsTogglingCart(true);
-                      setIsCartOpen(false);
-                      setShowOrderForm(false);
-                      setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
-                      setTimeout(() => setIsTogglingCart(false), 100);
-                    }
-                  }}
-                  disabled={isTogglingCart}
-                  className="text-gray-900 hover:text-gray-900 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"
-                >
-                  ×
-                </button>
+                <div className="flex items-center gap-2">
+                  {cart.length > 0 && (
+                    <button
+                      onClick={clearCart}
+                      className="text-red-600 hover:text-red-800 text-sm font-medium px-3 py-1 rounded-lg hover:bg-red-50 transition-colors"
+                    >
+                      {t[language].clearCart}
+                    </button>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!isTogglingCart) {
+                        setIsTogglingCart(true);
+                        setIsCartOpen(false);
+                        setShowOrderForm(false);
+                        setCustomerDetails({ whatsapp: '', location: '', mapsUrl: '' });
+                        setTimeout(() => setIsTogglingCart(false), 100);
+                      }
+                    }}
+                    disabled={isTogglingCart}
+                    className="text-gray-900 hover:text-gray-900 text-3xl font-bold w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
 
               {/* Content */}
@@ -782,7 +885,13 @@ export default function FishShop() {
                                     {language === 'en' ? product.name : product.nameRu}
                                   </h3>
                                   <p className={`text-gray-900 mt-1 ${isInTelegram ? 'text-xs' : 'text-sm'}`}>
-                                    {item.quantity} × {Math.round(item.weight / item.quantity)}g = {item.weight}g - <span className="font-semibold">฿{Math.round((product.price * item.weight) / 100)}</span>
+                                    {product.type === 'meat'
+                                      ? `${item.quantity} × 1 item = ${item.quantity} items - `
+                                      : `${item.quantity} × ${Math.round(item.weight / item.quantity)}g = ${item.weight}g - `
+                                    }
+                                    <span className="font-semibold">
+                                      ฿{Math.round(product.type === 'meat' ? (product.price * item.quantity) : (product.price * item.weight) / 100)}
+                                    </span>
                                   </p>
                                 </div>
 
@@ -819,31 +928,60 @@ export default function FishShop() {
 
                                         {/* Footer */}
                     <div className={`border-t border-warm-200 ${isInTelegram ? 'pt-4 bg-warm-50/50' : 'pt-4'} sticky bottom-0 z-10 bg-inherit`}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-lg font-bold text-gray-900">{t[language].currentWeight}</span>
-                        <span className="text-lg font-bold text-gray-900">{getTotalWeight()}g</span>
-                      </div>
+                      {getTotalWeight() > 0 && (
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-lg font-bold text-gray-900">{t[language].currentWeight}</span>
+                          <span className="text-lg font-bold text-gray-900">{getTotalWeight()}g</span>
+                        </div>
+                      )}
 
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xl font-bold text-gray-900">{t[language].total}:</span>
                         <span className="text-xl font-bold text-gray-900">฿{getTotalPrice()}</span>
                       </div>
 
-                      {getTotalWeight() < 300 ? (
-                        <p className="text-red-600 text-xs text-center mb-4 font-medium">
-                          {t[language].needMore.replace('{{amount}}', (300 - getTotalWeight()).toString())}
-                        </p>
-                      ) : (
-                        <p className="text-green-600 text-xs text-center mb-4 font-medium">
-                          ✓ {t[language].minOrder}
-                        </p>
-                      )}
+                      {(() => {
+                        const totalWeight = getTotalWeight()
+                        const hasFishProducts = cart.some(item => {
+                          const product = products.find(p => p.id === item.id)
+                          return product && product.type === 'fish'
+                        })
+
+                        if (hasFishProducts && totalWeight < 300) {
+                          return (
+                            <p className="text-red-600 text-xs text-center mb-4 font-medium">
+                              {t[language].needMore.replace('{{amount}}', (300 - totalWeight).toString())}
+                            </p>
+                          )
+                        } else if (hasFishProducts && totalWeight >= 300) {
+                          return (
+                            <p className="text-green-600 text-xs text-center mb-4 font-medium">
+                              ✓ {t[language].minOrder}
+                            </p>
+                          )
+                        }
+                        return null
+                      })()}
 
                       <button
                         onClick={handleOrder}
-                        disabled={getTotalWeight() < 300}
+                        disabled={(() => {
+                          const totalWeight = getTotalWeight()
+                          const hasFishProducts = cart.some(item => {
+                            const product = products.find(p => p.id === item.id)
+                            return product && product.type === 'fish'
+                          })
+                          return hasFishProducts && totalWeight < 300
+                        })()}
                         className={`w-full font-bold rounded-lg text-lg transition-all duration-200 ${isInTelegram ? 'py-4 px-6' : 'py-3 px-6'} ${
-                          getTotalWeight() < 300
+                          (() => {
+                            const totalWeight = getTotalWeight()
+                            const hasFishProducts = cart.some(item => {
+                              const product = products.find(p => p.id === item.id)
+                              return product && product.type === 'fish'
+                            })
+                            return hasFishProducts && totalWeight < 300
+                          })()
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : 'bg-gradient-to-r from-warm-500 to-warm-600 hover:from-warm-600 hover:to-warm-700 text-white'
                         }`}
@@ -1095,7 +1233,7 @@ export default function FishShop() {
               </div>
               <div className="text-left">
                 <div className="text-gray-900 font-semibold text-sm">
-                  {getTotalItems()} {getTotalItems() === 1 ? t[language].item : t[language].items} • {getTotalWeight()}g
+                  {getTotalItems()} {getTotalItems() === 1 ? t[language].item : t[language].items}{getTotalWeight() > 0 ? ` • ${getTotalWeight()}g` : ''}
                 </div>
                 <div className="text-gray-700 text-xs">
                   {t[language].cart}
